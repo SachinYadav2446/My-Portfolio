@@ -1499,13 +1499,12 @@ function OhHi() {
       const distance = node.offsetHeight - window.innerHeight;
       const p = Math.min(1, Math.max(0, -rect.top / Math.max(1, distance)));
 
-      // Moment 1 (Arrival, p from 0 to ~0.15): Photo is front & center. Text is hidden.
-      // Moment 2 (On scroll, p from 0.15 to ~0.72): Section stays pinned.
-      // Image DOES NOT FADE (stays 100% crisp & visible). On desktop, it shifts to the right
-      // leaving room for the OG text to smoothly appear on the left.
+      // Moment 1 (Arrival & Focus, p from 0 to 0.35): Photo commands full attention centered front & center.
+      // Moment 2 (Intentional Shift, p from 0.35 to 0.68): Photo shifts decisively to the right.
+      // Moment 3 (Settled, p > 0.68): Text and social actions are fully active.
       const isDesktop = window.innerWidth >= 768;
-      const t = Math.min(1, Math.max(0, (p - 0.12) / 0.52));
-      const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      const t = Math.min(1, Math.max(0, (p - 0.35) / 0.33));
+      const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
       if (photoRef.current) {
         if (isDesktop) {
@@ -1523,8 +1522,8 @@ function OhHi() {
         }
       }
 
-      const textT = Math.min(1, Math.max(0, (p - 0.18) / 0.46));
-      const textEase = textT < 0.5 ? 2 * textT * textT : 1 - Math.pow(-2 * textT + 2, 2) / 2;
+      const textT = Math.min(1, Math.max(0, (p - 0.38) / 0.30));
+      const textEase = textT < 0.5 ? 4 * textT * textT * textT : 1 - Math.pow(-2 * textT + 2, 3) / 2;
       const translateY = (1 - textEase) * 26;
 
       if (textRef.current) {
@@ -1565,8 +1564,7 @@ function OhHi() {
 
       if (insideSection || justAbove || justBelow) {
         e.preventDefault();
-        // 1.4× amplification keeps it feeling snappy even though we're slowing it down
-        const delta = e.deltaY * 1.4;
+        const delta = e.deltaY * 0.9;
         const target = Math.min(sectionScrollEnd, Math.max(sectionTop, scrollTop + delta));
         window.scrollTo({ top: target, behavior: "instant" });
       }
