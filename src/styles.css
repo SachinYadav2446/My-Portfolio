@@ -263,6 +263,21 @@
 @utility animate-draw-string { animation: draw-string 3.8s cubic-bezier(.22,.7,.2,1) both; }
 @utility animate-nudge-scroll { animation: nudge-scroll 1.7s ease-in-out infinite; }
 
+@keyframes marquee-left {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes marquee-right {
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+@utility animate-marquee-left {
+  animation: marquee-left 28s linear infinite;
+}
+@utility animate-marquee-right {
+  animation: marquee-right 28s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
