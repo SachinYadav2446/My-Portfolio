@@ -20,7 +20,9 @@ import voxieShot from "@/assets/project-voxie.webp";
 import x402Shot from "@/assets/project-x402.webp";
 import onkeyShot from "@/assets/project-onkey.webp";
 import inscribeShot from "@/assets/project-inscribe.webp";
-import climber from "@/assets/obj3d-climber.webp";
+import jaldrishtiShot from "@/assets/project-jaldrishti.jpg";
+import javaBasicsShot from "@/assets/project-java-basics.png";
+import jsBasicsShot from "@/assets/project-js-basics.png";
 import earth from "@/assets/rabbit-hole/earth.webp";
 import astronautFalling from "@/assets/rabbit-hole/astronaut-falling.webp";
 import camera from "@/assets/rabbit-hole/camera.webp";
@@ -88,12 +90,15 @@ type Project = {
 // get its screenshot in the spotlight.
 const projects: Project[] = [
   { title: "Bright Code", tags: ["Full-stack", "Collaboration"], object: laptop, shot: voxieShot, blurb: "collaborative coding platform for developers.", long: "A collaborative coding platform designed to help developers write, practice, and work on code efficiently in an interactive environment. Built with React, Node.js, Express, and MongoDB.", live: "https://bright-code-ruby.vercel.app/", code: "https://github.com/SachinYadav2446/BrightCode" },
+  { title: "JalDrishti", tags: ["Telemetry", "Geospatial", "IoT", "Full-stack"], object: globe, shot: jaldrishtiShot, blurb: "real-time groundwater evaluation from DWLR telemetry.", long: "An automated telemetric groundwater evaluation platform for the Ministry of Jal Shakti. Ingests 2.4M+ daily telemetry observations from 3,200+ DWLR stations across India-WRIS, computing GEC-2015 recharge calculations, sensor health triage, and 90-day predictive trend modeling.", code: "https://github.com/SachinYadav2446/JalDrishti" },
   { title: "Cyclone Pattern Identifier", tags: ["AI", "Computer Vision"], object: earth, shot: rexShot, blurb: "AI-powered cyclone detection system.", long: "An AI-based system for detecting and analyzing cyclone patterns from satellite imagery, including cyclone eye localization, intensity estimation, and forecasting up to 48 hours. Built with PyTorch, ConvNeXt, and ConvLSTM.", code: "https://github.com/SachinYadav2446/Cyclone-Pattern-Identifier" },
   { title: "Demand Forecast", tags: ["ML", "Forecasting"], object: brain, shot: screenmeshShot, blurb: "taxi demand prediction system.", long: "A taxi demand forecasting system that predicts zone-wise future demand using historical NYC taxi trip data and time-series forecasting techniques with ARIMA and SARIMAX models.", code: "https://github.com/SachinYadav2446/Taxi-Demand-Forecasting-System-" },
   { title: "Creatify", tags: ["Web", "Creative"], object: sparkles, shot: clinaraShot, blurb: "creative digital content platform.", long: "A creative digital platform focused on helping users create and manage engaging digital content through an intuitive and interactive interface built with React and modern web technologies.", code: "https://github.com/SachinYadav2446/Creatify" },
+  { title: "Java Basic Projects", tags: ["Java", "OOP", "Data Structures"], object: code, shot: javaBasicsShot, blurb: "core Java implementations, OOP patterns, and data structures.", long: "A structured collection of 12 progressive Java applications demonstrating object-oriented programming, data structures, and algorithmic patterns — spanning banking systems, sorting/searching algorithms, e-commerce catalogs, and library management.", code: "https://github.com/SachinYadav2446/Java-basic-Projects" },
+  { title: "JavaScript Basic Projects", tags: ["JavaScript", "Web", "DOM"], object: console_, shot: jsBasicsShot, blurb: "vanilla JavaScript web applications and DOM utilities.", long: "A comprehensive practical laboratory of JavaScript projects focusing on core DOM engineering, asynchronous REST API consumers (weather app), financial budgeting tools (bill splitter, expense tracker), and game mechanics.", code: "https://github.com/SachinYadav2446/JS-Projects-Basics-" },
 ];
 
-const filters = ["All", "Full-stack", "AI", "Computer Vision", "ML", "Forecasting", "Web", "Creative"];
+const filters = ["All", "Full-stack", "AI", "Computer Vision", "ML", "Forecasting", "Telemetry", "Web", "Java", "JavaScript"];
 
 // A fixed scatter of stars, so the sky looks the same on server and client.
 // (A proper hash, so the stars scatter instead of lining up in little rows.)
