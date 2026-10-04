@@ -2,6 +2,8 @@
 
 **Portfolio by Sachin Yadav (Binary Sphere)**
 
+🚀 **Live Site:** [https://my-portfolio-ten-beige-59.vercel.app/](https://my-portfolio-ten-beige-59.vercel.app/)
+
 My personal portfolio: a story told along a single hand-drawn thread, showcasing my journey through software development, AI/ML, and building intelligent systems.
 
 ## About Me
@@ -97,4 +99,4 @@ To customize it for yourself:
 
 ## Credits
 
-Original template design and concept by [Nidhi Prajapati](https://github.com/SomehowLiving/portfolio-template)
+Inspired by [SomehowLiving](https://github.com/SomehowLiving) — original template design and concept by [Nidhi Prajapati](https://github.com/SomehowLiving/portfolio-template).

@@ -2,7 +2,7 @@
 // here: titles, descriptions, the share image, and the structured data that
 // says who Nidhi is. None of it changes what's on screen.
 
-export const SITE_URL = "https://www.binarysphere.dev"; // Update with your actual domain
+export const SITE_URL = "https://my-portfolio-ten-beige-59.vercel.app";
 export const OG_IMAGE = `${SITE_URL}/og.png`;
 
 export const NAME = "Sachin Yadav";
