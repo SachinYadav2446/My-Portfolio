@@ -1733,73 +1733,13 @@ function OhHi() {
       if (!frame) frame = requestAnimationFrame(tick);
     };
 
-    // ── Scroll-trap ──────────────────────────────────────────────────────────
-    // Intercept wheel & touch events while this section is in play so a fast
-    // scroll can't skip past the portrait animation entirely.
-    let touchStartY = 0;
-
-    const onWheel = (e: WheelEvent) => {
-      const node = sectionRef.current;
-      if (!node) return;
-
-      const sectionTop = node.offsetTop;
-      const sectionHeight = node.offsetHeight;
-      const vh = window.innerHeight;
-      const scrollTop = window.scrollY;
-
-      const sectionScrollEnd = sectionTop + sectionHeight - vh;
-
-      const insideSection = scrollTop >= sectionTop && scrollTop <= sectionScrollEnd;
-      const justAbove = scrollTop < sectionTop && scrollTop > sectionTop - vh && e.deltaY > 0;
-      const justBelow = scrollTop > sectionScrollEnd && scrollTop < sectionScrollEnd + vh && e.deltaY < 0;
-
-      if (insideSection || justAbove || justBelow) {
-        e.preventDefault();
-        const delta = e.deltaY * 0.9;
-        const target = Math.min(sectionScrollEnd, Math.max(sectionTop, scrollTop + delta));
-        window.scrollTo({ top: target, behavior: "instant" });
-      }
-    };
-
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0]?.clientY ?? 0;
-    };
-
-    const onTouchMove = (e: TouchEvent) => {
-      const node = sectionRef.current;
-      if (!node) return;
-
-      const touchY = e.touches[0]?.clientY ?? 0;
-      const deltaY = (touchStartY - touchY) * 2;
-      touchStartY = touchY;
-
-      const sectionTop = node.offsetTop;
-      const sectionHeight = node.offsetHeight;
-      const vh = window.innerHeight;
-      const scrollTop = window.scrollY;
-      const sectionScrollEnd = sectionTop + sectionHeight - vh;
-      const insideSection = scrollTop >= sectionTop && scrollTop <= sectionScrollEnd;
-
-      if (insideSection) {
-        e.preventDefault();
-        const target = Math.min(sectionScrollEnd, Math.max(sectionTop, scrollTop + deltaY));
-        window.scrollTo({ top: target, behavior: "instant" });
-      }
-    };
-
     tick();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchmove", onTouchMove);
     };
   }, []);
 
