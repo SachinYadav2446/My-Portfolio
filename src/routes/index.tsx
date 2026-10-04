@@ -1,20 +1,26 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { createFileRoute } from '@tanstack/react-router';
+import { ArrowDown, ArrowUp, ArrowUpRight, Check, Copy, Mail } from "lucide-react";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
 
-import astronaut from "@/assets/obj3d-astronaut.webp";
-import brain from "@/assets/obj3d-brain.webp";
-import climber from "@/assets/obj3d-climber.webp";
-import globe from "@/assets/obj3d-globe.webp";
-import headphones from "@/assets/obj3d-headphones.webp";
-import keys from "@/assets/obj3d-keys.webp";
-import me from "@/assets/me.webp";
-import laptop from "@/assets/obj3d-laptop.webp";
-import rexImage from "@/assets/project-rex.webp";
-import screenmeshImage from "@/assets/project-screenmesh.webp";
-import voxieImage from "@/assets/project-voxie.webp";
+
+import sachinPortrait from "@/assets/sachin-final-portrait.png";
 import signature from "@/assets/signature.png";
-import { CLIMBED_OUT, RabbitHoleButton, takeFlag } from "@/components/rabbit-hole";
+import beyondCodePortrait from "@/assets/beyond-code-portrait.jpg";
+import voxieShot from "@/assets/project-voxie.webp";
+import rexShot from "@/assets/project-rex.webp";
+import screenmeshShot from "@/assets/project-screenmesh.webp";
+import clinaraShot from "@/assets/project-clinara.webp";
+import jaldrishtiShot from "@/assets/project-jaldrishti.jpg";
+import javaBasicsShot from "@/assets/project-java-basics.png";
+import jsBasicsShot from "@/assets/project-js-basics.png";
+import laptop from "@/assets/rabbit-hole/laptop.webp";
+import earth from "@/assets/rabbit-hole/earth.webp";
+import sparkles from "@/assets/rabbit-hole/sparkles.webp";
+import brain from "@/assets/obj3d-brain.webp";
+import globe from "@/assets/obj3d-globe.webp";
+import code from "@/assets/rabbit-hole/code.webp";
+import console_ from "@/assets/rabbit-hole/console.webp";
+import { CLIMBED_OUT, takeFlag } from "@/components/rabbit-hole";
 import { Button } from "@/components/ui/button";
 import { jsonLd, pageMeta, person, SITE_URL } from "@/lib/seo";
 import { cn } from "@/lib/utils";
@@ -60,19 +66,12 @@ const say = (id: string, text: string, fade = true) => {
   window.dispatchEvent(new CustomEvent<CursorComment>("cursor-comment", { detail: { id, text, fade } }));
 };
 
-// The image opens the live site; the arrow opens the code.
-const projects = [
-  { number: "01", title: "Bright Code", image: voxieImage, tags: ["Full-stack", "Collaboration"], blurb: "a collaborative coding platform for developers to write, practice, and work on code efficiently in an interactive environment.", live: "https://bright-code-ruby.vercel.app/", code: "https://github.com/SachinYadav2446/BrightCode" },
-  { number: "02", title: "Cyclone Pattern Identifier", image: rexImage, tags: ["AI", "Computer Vision"], blurb: "AI-based system for detecting and analyzing cyclone patterns from satellite imagery, with eye localization and intensity estimation.", live: "", code: "https://github.com/SachinYadav2446/Cyclone-Pattern-Identifier" },
-  { number: "03", title: "Demand Forecast", image: screenmeshImage, tags: ["ML", "Forecasting"], blurb: "taxi demand forecasting system predicting zone-wise future demand using NYC data and time-series forecasting techniques.", live: "", code: "https://github.com/SachinYadav2446/Taxi-Demand-Forecasting-System-" },
-  { number: "04", title: "Creatify", image: voxieImage, tags: ["Web", "Creative"], blurb: "creative digital platform helping users create and manage engaging digital content through an intuitive interface.", live: "", code: "https://github.com/SachinYadav2446/Creatify" },
-];
 
 // The story canvas is CANVAS_VW wide and slides CANVAS_TRAVEL_VW across the
 // scroll. Everything on it is placed in vw/vh, and the SVG uses a viewBox of
 // (CANVAS_VW * 10) x 1000, so one vw is 10 units and one vh is 10 units.
-const CANVAS_VW = 570;
-const CANVAS_TRAVEL_VW = 470;
+const CANVAS_VW = 400;
+const CANVAS_TRAVEL_VW = 300;
 
 // Place something on the canvas by its vw/vh coordinates.
 const at = (x: number, y: number) => ({ left: `${x}vw`, top: `${y}vh` });
@@ -85,14 +84,9 @@ type Waypoint = [x: number, y: number, loop?: number];
 // narrowed to stay round rather than squashed.
 const LOOP_ASPECT = 1.8;
 
-// Where the thread finally ends: at the "see the work" button.
-const BUTTON_X = 537;
-const BUTTON_Y = 59;
-
-// The big loop the habit is tied around, near the end of the story.
-const LOOP_X = 474;
-const LOOP_Y = 70;
-const LOOP_R = 17;
+// Where the thread finally ends: at the explore identity button at the downside of the screen.
+const BUTTON_X = 377;
+const BUTTON_Y = 88;
 
 // The thread is a Catmull-Rom curve through the waypoints (plus the extra
 // points each loop adds), written out as cubic Béziers in viewBox units.
@@ -166,11 +160,16 @@ function sampleSegments(segments: Segment[], perSegment = 48): ThreadSamples {
 // smooths out through the few things that have my heart, runs straight along
 // the timeline, and simply stops before the work.
 const THREAD_WAYPOINTS: Waypoint[] = [
-  [62, 49.5], [76, 49.5], [90, 47], [102, 40, 9], [116, 56], [132, 57], [146, 48],
-  [156, 40], [164, 29], [171, 33], [174.5, 35.6], [181, 42], [186, 62], [198, 68],
-  [205, 68], [216, 50], [229, 34], [233, 50], [250, 58], [262, 70], [272, 88], [292, 54],
-  [304, 48], [322, 51], [340, 52], [358, 50], [376, 46], [394, 43], [410, 46],
-  [422, 60], [440, 70], [458, 71], [LOOP_X, LOOP_Y, LOOP_R], [496, 76], [514, 78], [528, 70], [BUTTON_X, BUTTON_Y],
+  [62, 49.5], [76, 49.5], [88, 44], [102, 38, 8],
+  [114, 46], [124, 52],
+  [136, 55.5], [148, 46],
+  [160, 43.5], [172, 52],
+  [184, 55.5], [196, 46],
+  [208, 43.5], [220, 52],
+  [232, 55.5], [244, 46],
+  [265, 52],
+  [290, 55], [318, 48, 6], [348, 65],
+  [BUTTON_X, BUTTON_Y],
 ];
 const THREAD = threadPath(THREAD_WAYPOINTS);
 
@@ -193,13 +192,13 @@ function ParallaxEnvironment({ subscribe }: { subscribe: Subscribe }) {
   useEffect(() => {
     return subscribe((progress) => {
       // Parallax speeds:
-      // Deep layer moves at ~150vw total (much slower than canvas 470vw)
+      // Deep layer moves at ~160vw total
       if (deepGridRef.current) {
-        deepGridRef.current.style.transform = `translate3d(-${progress * 150}vw, 0, 0)`;
+        deepGridRef.current.style.transform = `translate3d(-${progress * 160}vw, 0, 0)`;
       }
-      // Midground tech elements move at ~280vw total
+      // Midground tech elements move at ~300vw total
       if (midLayerRef.current) {
-        midLayerRef.current.style.transform = `translate3d(-${progress * 280}vw, 0, 0)`;
+        midLayerRef.current.style.transform = `translate3d(-${progress * 300}vw, 0, 0)`;
       }
       // Dust particles drift forward fast at ~580vw total
       if (dustLayerRef.current) {
@@ -219,7 +218,7 @@ function ParallaxEnvironment({ subscribe }: { subscribe: Subscribe }) {
       <div
         ref={deepGridRef}
         className="absolute inset-y-0 left-0 will-change-transform"
-        style={{ width: "260vw" }}
+        style={{ width: "300vw" }}
       >
         {/* Subtle grid pattern */}
         <div
@@ -230,10 +229,10 @@ function ParallaxEnvironment({ subscribe }: { subscribe: Subscribe }) {
             backgroundSize: "60px 60px, 120px 120px, 120px 120px",
           }}
         />
-        {/* Atmospheric nebula light pools that drift in the background */}
-        <div className="absolute left-[70vw] top-[20vh] h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/10 blur-[130px]" />
-        <div className="absolute left-[130vw] top-[60vh] h-[550px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/10 blur-[120px]" />
-        <div className="absolute left-[200vw] top-[30vh] h-[650px] w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500/10 blur-[140px]" />
+        {/* Atmospheric monochrome ambient pools that drift in the background */}
+        <div className="absolute left-[70vw] top-[20vh] h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/[0.025] blur-[140px]" />
+        <div className="absolute left-[130vw] top-[60vh] h-[550px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/[0.02] blur-[130px]" />
+        <div className="absolute left-[200vw] top-[30vh] h-[650px] w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/[0.03] blur-[150px]" />
       </div>
 
       {/* Layer 2: Dimensional Warp Portal (illuminates at the transition between signature & realm) */}
@@ -242,12 +241,12 @@ function ParallaxEnvironment({ subscribe }: { subscribe: Subscribe }) {
         className="absolute inset-y-0 left-[35vw] w-[80vw] will-change-transform opacity-0 transition-opacity duration-300"
       >
         {/* Vertical dimensional energy slit & radial bloom */}
-        <div className="absolute left-1/2 top-1/2 h-[90vh] w-[40vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-violet-600/15 via-purple-500/20 to-indigo-600/15 blur-[80px]" />
+        <div className="absolute left-1/2 top-1/2 h-[90vh] w-[40vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-foreground/[0.03] via-foreground/[0.06] to-foreground/[0.03] blur-[80px]" />
         {/* Speed lines / light rays */}
-        <div className="absolute inset-0 flex items-center justify-around opacity-20">
-          <div className="h-full w-px bg-gradient-to-b from-transparent via-violet-400 to-transparent" />
-          <div className="h-3/4 w-px bg-gradient-to-b from-transparent via-indigo-400 to-transparent" />
-          <div className="h-full w-px bg-gradient-to-b from-transparent via-cyan-400 to-transparent" />
+        <div className="absolute inset-0 flex items-center justify-around opacity-15">
+          <div className="h-full w-px bg-gradient-to-b from-transparent via-foreground/30 to-transparent" />
+          <div className="h-3/4 w-px bg-gradient-to-b from-transparent via-foreground/20 to-transparent" />
+          <div className="h-full w-px bg-gradient-to-b from-transparent via-foreground/30 to-transparent" />
         </div>
       </div>
 
@@ -271,23 +270,22 @@ function ParallaxEnvironment({ subscribe }: { subscribe: Subscribe }) {
       <div
         ref={dustLayerRef}
         className="absolute inset-y-0 left-0 will-change-transform"
-        style={{ width: "540vw" }}
+        style={{ width: "560vw" }}
       >
         {[
-          { x: "75vw", y: "30vh", s: "h-1 w-1 bg-violet-400/60" },
-          { x: "88vw", y: "65vh", s: "h-1.5 w-1.5 bg-indigo-400/70" },
-          { x: "105vw", y: "20vh", s: "h-1 w-1 bg-cyan-400/60" },
-          { x: "125vw", y: "78vh", s: "h-1.5 w-1.5 bg-violet-400/50" },
-          { x: "155vw", y: "35vh", s: "h-1 w-1 bg-purple-400/60" },
-          { x: "190vw", y: "60vh", s: "h-1.5 w-1.5 bg-sky-400/50" },
-          { x: "230vw", y: "25vh", s: "h-1 w-1 bg-violet-400/70" },
-          { x: "280vw", y: "70vh", s: "h-1.5 w-1.5 bg-indigo-400/60" },
-          { x: "340vw", y: "40vh", s: "h-1 w-1 bg-cyan-400/70" },
-          { x: "410vw", y: "55vh", s: "h-1.5 w-1.5 bg-violet-400/60" },
+          { x: "75vw", y: "30vh", s: "h-1 w-1 bg-foreground/30" },
+          { x: "88vw", y: "65vh", s: "h-1.5 w-1.5 bg-foreground/40" },
+          { x: "105vw", y: "20vh", s: "h-1 w-1 bg-foreground/35" },
+          { x: "125vw", y: "78vh", s: "h-1.5 w-1.5 bg-foreground/25" },
+          { x: "155vw", y: "35vh", s: "h-1 w-1 bg-foreground/35" },
+          { x: "190vw", y: "60vh", s: "h-1.5 w-1.5 bg-foreground/30" },
+          { x: "230vw", y: "25vh", s: "h-1 w-1 bg-foreground/45" },
+          { x: "280vw", y: "70vh", s: "h-1.5 w-1.5 bg-foreground/35" },
+          { x: "340vw", y: "40vh", s: "h-1 w-1 bg-foreground/40" },
         ].map((pt, i) => (
           <span
             key={i}
-            className={cn("absolute rounded-full shadow-[0_0_8px_currentColor]", pt.s)}
+            className={cn("absolute rounded-full shadow-[0_0_6px_currentColor]", pt.s)}
             style={{ left: pt.x, top: pt.y }}
           />
         ))}
@@ -320,17 +318,15 @@ function Portfolio() {
       window.removeEventListener("resize", check);
     };
   }, []);
-  const [filter, setFilter] = useState("All");
-
   // First the mind arrives, then its note, and only then does scrolling take over.
   useEffect(() => {
     const root = document.documentElement;
-    // Climbing back out of the rabbit hole lands straight on the work, no intro.
-    if (takeFlag(CLIMBED_OUT) || window.location.hash === "#work") {
+    // Climbing back out of the rabbit hole lands straight on the identity section, no intro.
+    if (takeFlag(CLIMBED_OUT) || window.location.hash === "#work" || window.location.hash === "#identity") {
       setShowSplash(false);
       setNoteRevealed(true);
       setScrollReady(true);
-      requestAnimationFrame(() => document.getElementById("work")?.scrollIntoView({ behavior: "instant" }));
+      requestAnimationFrame(() => (document.getElementById("identity") || document.getElementById("work"))?.scrollIntoView({ behavior: "instant" }));
       return;
     }
 
@@ -452,17 +448,15 @@ function Portfolio() {
         </button>
       </header>
 
-      <section id="brain" ref={storyRef} className="relative md:h-[720vh]">
+      <section id="brain" ref={storyRef} className="relative md:h-[580vh]">
         <div className="sticky top-0 hidden h-screen overflow-hidden md:block">
           <ParallaxEnvironment subscribe={subscribe} />
           <div ref={canvasRef} className="relative h-full will-change-transform max-md:hidden" style={{ width: `${CANVAS_VW}vw` }}>
             <StringLine subscribe={subscribe} />
-            <div className="absolute inset-0 z-10">
+            <div className="absolute inset-y-0 left-0 z-10" style={{ width: `${CANVAS_VW}vw` }}>
               <IntroScene contentRevealed={noteRevealed} noteRevealed={noteRevealed} />
               <TinkerScene />
-              <HeartScene />
               <TimelineScene />
-              <ApparentlyScene />
               <EnoughScene onWork={() => go("work")} />
             </div>
           </div>
@@ -470,7 +464,7 @@ function Portfolio() {
         <MobileStory ready={noteRevealed} onWork={() => go("work")} />
       </section>
 
-      <Works filter={filter} setFilter={setFilter} />
+      <WorkSection />
       <OhHi />
       <CuriousCursor visible={scrollReady} />
       <PhoneComment />
@@ -490,30 +484,51 @@ const REVEAL_INSET = 4;
 
 function StringLine({ subscribe }: { subscribe: Subscribe }) {
   const pathRef = useRef<SVGPathElement>(null);
+  const glowPathRef = useRef<SVGPathElement>(null);
+  const shimmerPathRef = useRef<SVGPathElement>(null);
   const tipRef = useRef<SVGCircleElement>(null);
+  const tipHaloRef = useRef<SVGCircleElement>(null);
+  const tipPulseRef = useRef<SVGCircleElement>(null);
 
   useEffect(() => {
-    const path = pathRef.current;
-    const tip = tipRef.current;
-    if (!path || !tip) return;
     const { xs, ys, lengths, total } = getThreadSamples();
     const count = xs.length - 1;
 
     const draw = (progress: number) => {
-    // Where the tip should sit: viewport's left edge (in viewBox units) plus
-    // 55% of the visible width (1000 units).
-    // Over the last stretch the tip runs ahead of its anchor, so the thread
-    // reaches the button at the very end instead of stopping mid-screen.
-    const catchUp = Math.max(0, (progress - 0.9) / 0.1) * 150;
-    const targetX = progress * CANVAS_TRAVEL_VW * 10 + TIP_SCREEN_ANCHOR * 1000 + catchUp;
-    let i = 0;
-    while (i < count && (xs[i] ?? 0) < targetX) i += 1;
-    const length = lengths[i] ?? total;
+      // Where the tip should sit: viewport's left edge (in viewBox units) plus
+      // 55% of the visible width (1000 units).
+      // Over the last stretch the tip runs ahead of its anchor, so the thread
+      // reaches the button at the very end instead of stopping mid-screen.
+      const catchUp = Math.max(0, (progress - 0.9) / 0.1) * 150;
+      const targetX = progress * CANVAS_TRAVEL_VW * 10 + TIP_SCREEN_ANCHOR * 1000 + catchUp;
+      let i = 0;
+      while (i < count && (xs[i] ?? 0) < targetX) i += 1;
+      const length = lengths[i] ?? total;
 
-    path.style.strokeDashoffset = `${1 - length / total}`;
-    tip.setAttribute("cx", `${xs[i]}`);
-    tip.setAttribute("cy", `${ys[i]}`);
-    tip.style.opacity = length <= 0 || length >= total * 0.999 ? "0" : "1";
+      const offset = `${1 - length / total}`;
+      if (pathRef.current) pathRef.current.style.strokeDashoffset = offset;
+      if (glowPathRef.current) glowPathRef.current.style.strokeDashoffset = offset;
+      if (shimmerPathRef.current) shimmerPathRef.current.style.strokeDashoffset = offset;
+
+      const currentX = xs[i] ?? 0;
+      const currentY = ys[i] ?? 0;
+      const isVisible = length <= 0 || length >= total * 0.999 ? "0" : "1";
+
+      if (tipRef.current) {
+        tipRef.current.setAttribute("cx", `${currentX}`);
+        tipRef.current.setAttribute("cy", `${currentY}`);
+        tipRef.current.style.opacity = isVisible;
+      }
+      if (tipHaloRef.current) {
+        tipHaloRef.current.setAttribute("cx", `${currentX}`);
+        tipHaloRef.current.setAttribute("cy", `${currentY}`);
+        tipHaloRef.current.style.opacity = isVisible;
+      }
+      if (tipPulseRef.current) {
+        tipPulseRef.current.setAttribute("cx", `${currentX}`);
+        tipPulseRef.current.setAttribute("cy", `${currentY}`);
+        tipPulseRef.current.style.opacity = isVisible;
+      }
     };
     draw(0);
     return subscribe(draw);
@@ -522,41 +537,39 @@ function StringLine({ subscribe }: { subscribe: Subscribe }) {
 
   return (
     <svg aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full overflow-visible" viewBox={`0 0 ${CANVAS_VW * 10} 1000`} preserveAspectRatio="none">
-      {/* Modern gradient definitions */}
+      {/* Black gradient definitions */}
       <defs>
         <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.3" />
-          <stop offset="8%" stopColor="currentColor" stopOpacity="0.6" />
-          <stop offset="14%" stopColor="#8b5cf6" stopOpacity="0.95" />
-          <stop offset="24%" stopColor="#6366f1" stopOpacity="0.9" />
-          <stop offset="42%" stopColor="#38bdf8" stopOpacity="0.85" />
-          <stop offset="68%" stopColor="#8b5cf6" stopOpacity="0.85" />
-          <stop offset="88%" stopColor="#6366f1" stopOpacity="0.75" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0.3" />
+          <stop offset="0%" stopColor="#000000" stopOpacity="0.25" />
+          <stop offset="12%" stopColor="#18181b" stopOpacity="0.9" />
+          <stop offset="28%" stopColor="#000000" stopOpacity="1" />
+          <stop offset="48%" stopColor="#27272a" stopOpacity="0.95" />
+          <stop offset="68%" stopColor="#09090b" stopOpacity="1" />
+          <stop offset="86%" stopColor="#18181b" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="#000000" stopOpacity="0.3" />
         </linearGradient>
         <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.05" />
-          <stop offset="12%" stopColor="#8b5cf6" stopOpacity="0.4" />
-          <stop offset="24%" stopColor="#6366f1" stopOpacity="0.45" />
-          <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.35" />
-          <stop offset="75%" stopColor="#8b5cf6" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0.05" />
+          <stop offset="0%" stopColor="#000000" stopOpacity="0.03" />
+          <stop offset="15%" stopColor="#18181b" stopOpacity="0.15" />
+          <stop offset="50%" stopColor="#000000" stopOpacity="0.2" />
+          <stop offset="85%" stopColor="#18181b" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="#000000" stopOpacity="0.03" />
         </linearGradient>
         {/* Animated gradient for moving shimmer effect */}
         <linearGradient id="shimmerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.1">
-            <animate attributeName="stop-opacity" values="0.1;0.5;0.1" dur="3s" repeatCount="indefinite" />
+          <stop offset="0%" stopColor="#27272a" stopOpacity="0.1">
+            <animate attributeName="stop-opacity" values="0.1;0.35;0.1" dur="2.4s" repeatCount="indefinite" />
           </stop>
-          <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.7">
-            <animate attributeName="stop-opacity" values="0.4;0.9;0.4" dur="3s" repeatCount="indefinite" />
+          <stop offset="50%" stopColor="#000000" stopOpacity="0.6">
+            <animate attributeName="stop-opacity" values="0.3;0.7;0.3" dur="2.4s" repeatCount="indefinite" />
           </stop>
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0.1">
-            <animate attributeName="stop-opacity" values="0.1;0.5;0.1" dur="3s" repeatCount="indefinite" />
+          <stop offset="100%" stopColor="#27272a" stopOpacity="0.1">
+            <animate attributeName="stop-opacity" values="0.1;0.35;0.1" dur="2.4s" repeatCount="indefinite" />
           </stop>
         </linearGradient>
-        {/* Enhanced glow filter */}
+        {/* Soft shadow filter */}
         <filter id="glow">
-          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
           <feMerge>
             <feMergeNode in="coloredBlur"/>
             <feMergeNode in="SourceGraphic"/>
@@ -564,15 +577,15 @@ function StringLine({ subscribe }: { subscribe: Subscribe }) {
         </filter>
       </defs>
       
-      {/* Wide glow base layer */}
+      {/* Wide soft shadow base layer */}
       <path 
-        ref={pathRef} 
+        ref={glowPathRef} 
         pathLength="1" 
         style={{ strokeDashoffset: 1 }} 
         d={THREAD} 
         fill="none" 
         stroke="url(#glowGradient)" 
-        strokeWidth="8" 
+        strokeWidth="9" 
         strokeLinecap="round" 
         strokeLinejoin="round" 
         strokeDasharray="1" 
@@ -580,9 +593,9 @@ function StringLine({ subscribe }: { subscribe: Subscribe }) {
         filter="url(#glow)" 
       />
       
-      {/* Shimmer layer for subtle animation */}
+      {/* Shimmer layer for subtle dark pulse */}
       <path 
-        ref={pathRef} 
+        ref={shimmerPathRef} 
         pathLength="1" 
         style={{ strokeDashoffset: 1 }} 
         d={THREAD} 
@@ -595,7 +608,7 @@ function StringLine({ subscribe }: { subscribe: Subscribe }) {
         opacity="0.6" 
       />
       
-      {/* Main sleek line - more prominent */}
+      {/* Main sleek black gradient line */}
       <path 
         ref={pathRef} 
         pathLength="1" 
@@ -603,42 +616,34 @@ function StringLine({ subscribe }: { subscribe: Subscribe }) {
         d={THREAD} 
         fill="none" 
         stroke="url(#lineGradient)" 
-        strokeWidth="3" 
+        strokeWidth="2.8" 
         strokeLinecap="round" 
         strokeLinejoin="round" 
         strokeDasharray="1" 
       />
       
       {/* Portal entry aura around the entry loop */}
-      <g opacity="0.45">
-        <circle cx="1020" cy="400" r="52" fill="none" stroke="#8b5cf6" strokeWidth="1" strokeDasharray="4 6" opacity="0.35">
-          <animateTransform attributeName="transform" type="rotate" from="0 1020 400" to="360 1020 400" dur="18s" repeatCount="indefinite" />
+      <g opacity="0.35">
+        <circle cx="1020" cy="400" r="54" fill="none" stroke="#18181b" strokeWidth="1" strokeDasharray="4 6" opacity="0.3">
+          <animateTransform attributeName="transform" type="rotate" from="0 1020 400" to="360 1020 400" dur="16s" repeatCount="indefinite" />
         </circle>
-        <circle cx="1020" cy="400" r="32" fill="none" stroke="#6366f1" strokeWidth="1.5" opacity="0.45">
-          <animate attributeName="r" values="30;36;30" dur="3s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.45;0.2;0.45" dur="3s" repeatCount="indefinite" />
+        <circle cx="1020" cy="400" r="34" fill="none" stroke="#000000" strokeWidth="1.2" opacity="0.35">
+          <animate attributeName="r" values="32;36;32" dur="2.8s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.35;0.15;0.35" dur="2.8s" repeatCount="indefinite" />
         </circle>
       </g>
       
-      {/* Animated tip following the thread on scroll */}
-      <circle ref={tipRef} r="6" cx="620" cy="495" style={{ opacity: 0 }} className="fill-violet-500 drop-shadow-[0_0_12px_rgba(139,92,246,0.95)]" />
+      {/* Animated tip following the thread on scroll - sleek monochrome tracer */}
+      <circle ref={tipPulseRef} r="14" cx="620" cy="495" style={{ opacity: 0 }} className="fill-none stroke-foreground/35 stroke-[1.2] animate-ping" />
+      <circle ref={tipHaloRef} r="8" cx="620" cy="495" style={{ opacity: 0 }} className="fill-foreground/15 stroke-foreground/40 stroke-1 drop-shadow-sm" />
+      <circle ref={tipRef} r="4" cx="620" cy="495" style={{ opacity: 0 }} className="fill-foreground drop-shadow-sm" />
     </svg>
   );
 }
 
-function IntroScene({ contentRevealed, noteRevealed }: { contentRevealed: boolean; noteRevealed: boolean }) {
+function IntroScene({ contentRevealed }: { contentRevealed: boolean; noteRevealed?: boolean }) {
   return (
     <div className="absolute left-0 top-0 h-full w-screen">
-      <div className={cn("absolute bottom-10 left-8 transition-all duration-700 sm:bottom-8", contentRevealed ? "opacity-100" : "animate-reveal [animation-delay:2.2s]")}>
-        <p className="text-4xl font-semibold leading-[0.95] sm:text-5xl">
-          <span className="bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
-            The Journey of
-          </span>
-          <br />
-          <span className="font-serif text-5xl italic sm:text-6xl">a curious builder.</span>
-        </p>
-      </div>
-      
       {/* Signature in Center */}
       <div
         className={cn(
@@ -652,18 +657,9 @@ function IntroScene({ contentRevealed, noteRevealed }: { contentRevealed: boolea
         <img
           src={signature}
           alt="Sachin Yadav Signature"
-          className="w-[280px] sm:w-[380px] md:w-[460px] lg:w-[520px] max-w-[85vw] h-auto object-contain select-none pointer-events-none drop-shadow-sm transition-all duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_10px_25px_rgba(124,58,237,0.18)] dark:invert"
+          className="w-[340px] sm:w-[480px] md:w-[580px] lg:w-[680px] xl:w-[750px] max-w-[90vw] h-auto object-contain select-none pointer-events-none drop-shadow-sm transition-all duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_10px_25px_rgba(124,58,237,0.18)] dark:invert"
           draggable={false}
         />
-      </div>
-      
-      {/* Modern info card instead of arrow */}
-      <div className={cn("absolute left-[62%] top-28 max-w-64 rounded-2xl border border-border/40 bg-background/80 p-4 text-sm text-muted-foreground shadow-lg backdrop-blur-sm transition-all duration-500", noteRevealed ? "opacity-100" : "animate-reveal [animation-delay:2.2s]")}>
-        <div className="mb-2 flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-foreground/60" />
-          <span className="text-xs font-medium uppercase tracking-wider">About this portfolio</span>
-        </div>
-        <p className="leading-relaxed">A visual journey through my projects, experiences, and the technologies I explore.</p>
       </div>
     </div>
   );
@@ -675,45 +671,22 @@ function Note({ x, y, className, at: revealAt, children }: { x: number; y: numbe
   return <div className={cn("absolute", className)} style={at(x, y)} data-at={revealAt}>{children}</div>;
 }
 
-// i tinker with a lot of stuff — a modern section with clean typography
+// i tinker with a lot of stuff — creative tools and passions
 function TinkerScene() {
   return (
     <div>
       <span hidden data-mode="thread" data-at={100} data-say="exploring new technologies." />
       {/* Realm Entry Marker */}
       <Note x={88} y={34} className="reveal pointer-events-none select-none" at={86}>
-        <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-violet-500/80 uppercase">
-          <span className="h-1.5 w-1.5 rounded-full bg-violet-400 animate-ping" />
-          <span>Entering Digital Realm</span>
+        <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-foreground/80 uppercase">
+          <span className="h-1.5 w-1.5 rounded-full bg-foreground animate-ping" />
+          <span>Engineering &amp; Innovation</span>
           <span className="text-muted-foreground/40">//</span>
         </div>
       </Note>
-      <Note x={120} y={42} className="reveal w-[38vw] text-center" at={120}>
-        <div className="rounded-2xl border border-border/30 bg-background/95 p-6 shadow-xl backdrop-blur-sm">
-          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-muted-foreground">What I Do</p>
-          <h2 className="mb-2 font-serif text-5xl font-medium leading-tight">Full-Stack Developer</h2>
-          <p className="text-base text-muted-foreground">Building intelligent systems with modern technologies</p>
-        </div>
-      </Note>
-      <Object src={laptop} alt="a laptop covered in stickers" label="Where ideas come to life" style={at(106, 19)} size="sm" delay="0s" />
-      <Object src={keys} alt="a set of keycaps" label="Crafting digital experiences" style={at(136, 18)} size="sm" delay=".3s" />
-      <Climber />
     </div>
   );
 }
-
-// The stretch of thread the climber can travel along, in vw.
-const CLIMB_FROM = 157;
-// Down the slope past the heading, all the way to the web3 globe.
-const CLIMB_TO = 197;
-// How close (vh) the pointer must be to the thread for her to follow it.
-const CLIMB_REACH = 14;
-const CLIMB_START = 174.5;
-// Where her hands are inside the image, as a fraction of its box.
-const GRIP_X = 0.57;
-const GRIP_Y = 0.2;
-const CLIMBER_W = 9;
-const CLIMBER_H = 18;
 
 // Points on the thread between two x positions, as (x, y) pairs in vw/vh.
 function sampleThread(from: number, to: number) {
@@ -730,142 +703,67 @@ function sampleThread(from: number, to: number) {
   return { xs, ys };
 }
 
-// The climber hangs from the thread itself and swings gently from her grip.
-// Move the pointer along the thread and she climbs after it, hand over hand —
-// tilting with the slope — as far as the web3 globe. It listens to the whole
-// window rather than a hit box, so it never blocks the heading or the globe.
-function Climber() {
-  const originRef = useRef<HTMLDivElement>(null);
-  const samples = useRef<{ xs: number[]; ys: number[] } | null>(null);
-  const target = useRef(CLIMB_START);
-  const current = useRef(CLIMB_START);
-  const frame = useRef(0);
-  const [pose, setPose] = useState({ x: CLIMB_START, y: 35.6, angle: 0, reach: 0 });
-
-  const yAt = (x: number) => {
-    const s = samples.current;
-    if (!s || s.xs.length === 0) return 35.6;
-    let i = 0;
-    while (i < s.xs.length - 1 && (s.xs[i + 1] ?? 0) < x) i += 1;
-    return s.ys[i] ?? 35.6;
-  };
-
-  const place = (x: number, reach: number) => {
-    const y = yAt(x);
-    // Slope in screen pixels, so the tilt matches what you see.
-    const dy = (yAt(x + 0.5) - yAt(x - 0.5)) * window.innerHeight;
-    const dx = window.innerWidth;
-    // Follow the slope, but not so far she's lying flat on the steep drop.
-    const angle = Math.max(-28, Math.min(28, ((Math.atan2(dy, dx) * 180) / Math.PI) * 0.6));
-    setPose({ x, y, angle, reach });
-  };
-
-  useEffect(() => {
-    samples.current = sampleThread(CLIMB_FROM, CLIMB_TO);
-    place(CLIMB_START, 0);
-    // The origin div sits at CLIMB_FROM on the canvas, so its left edge maps
-    // the pointer into canvas vw; the canvas is viewport-tall, so y is just vh.
-    const follow = (event: PointerEvent) => {
-      const origin = originRef.current;
-      if (!origin) return;
-      const x = CLIMB_FROM + ((event.clientX - origin.getBoundingClientRect().left) / window.innerWidth) * 100;
-      const y = (event.clientY / window.innerHeight) * 100;
-      if (x < CLIMB_FROM - 2 || x > CLIMB_TO + 2 || Math.abs(y - yAt(Math.min(CLIMB_TO, Math.max(CLIMB_FROM, x)))) > CLIMB_REACH) return;
-      target.current = Math.min(CLIMB_TO, Math.max(CLIMB_FROM, x));
-      if (!frame.current) frame.current = requestAnimationFrame(climb);
-    };
-    window.addEventListener("pointermove", follow, { passive: true });
-    return () => {
-      window.removeEventListener("pointermove", follow);
-      cancelAnimationFrame(frame.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Move a little each frame, like pulling along the thread, not teleporting.
-  const climb = () => {
-    const gap = target.current - current.current;
-    if (Math.abs(gap) < 0.05) {
-      place(current.current, 0);
-      frame.current = 0;
-      return;
-    }
-    current.current += Math.sign(gap) * Math.min(Math.abs(gap), 0.12);
-    place(current.current, Math.sin(current.current * 3));
-    frame.current = requestAnimationFrame(climb);
-  };
-
-  return (
-    <div ref={originRef} className="pointer-events-none absolute" style={at(CLIMB_FROM, 22)}>
-      <div
-        className="pointer-events-auto absolute"
-        style={{
-          left: `${pose.x - CLIMB_FROM - GRIP_X * CLIMBER_W}vw`,
-          top: `${pose.y - 22 - GRIP_Y * CLIMBER_H}vh`,
-          width: `${CLIMBER_W}vw`,
-          height: `${CLIMBER_H}vh`,
-          transformOrigin: `${GRIP_X * 100}% ${GRIP_Y * 100}%`,
-          // While climbing she rocks side to side with each hand-over-hand pull.
-          transform: `rotate(${pose.angle + pose.reach * 7}deg) translateY(${Math.abs(pose.reach) * -0.6}vh)`,
-        }}
-      >
-        <div className={cn("h-full w-full", pose.reach === 0 && "animate-hang")}>
-          <Figure src={climber} alt="someone hanging from the thread" label="apparently i like climbing things." size="fill" still labelStyle={{ rotate: `${-(pose.angle + pose.reach * 7)}deg` }} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const heart = [
-  { src: globe, alt: "a globe wrapped in orbits", x: 200, y: 56, title: "web3 came first.", body: "got curious about systems that don't need one person in charge.", label: "yes, i'm still here." },
-  { src: headphones, alt: "a pair of headphones", x: 224, y: 22, title: "turns out, i like people too.", body: "explaining things is pretty fun too.", label: "docs, talks, demos, communities." },
-  { src: brain, alt: "a brain", x: 260, y: 60, title: "and now, AI.", body: "half engineer. half “what if?”", label: "still trying to understand this thing." },
-];
-
-// but few things have my heart — each one an object with a big line and a
-// quiet one beside it, and the thread running calmly between the objects.
-function HeartScene() {
-  return (
-    <div>
-      <span hidden data-mode="thread" data-at={184} data-say="okay, the soft part." />
-      <Note x={181} y={18} className="reveal w-[22rem]" at={182}><h2 className="font-serif text-6xl leading-none">but few things have my heart.</h2></Note>
-      {heart.map((h, index) => (
-        <Note key={h.title} x={h.x} y={h.y} className="reveal flex items-center gap-5" at={h.x + 2}>
-          <Figure src={h.src} alt={h.alt} label={h.label} delay={`${index * 0.5}s`} />
-          <div className="w-64">
-            <p className="font-serif text-4xl leading-tight">{h.title}</p>
-            <p className="mt-2 text-muted-foreground">{h.body}</p>
-          </div>
-        </Note>
-      ))}
-    </div>
-  );
-}
-
-// One beat per year, told like a story: a short line that moves it forward,
-// and the detail underneath for anyone who wants it.
 const timeline = [
-  { year: "1st Year", title: "learning the fundamentals.", line: "Programming basics, Java, OOP, DSA, DBMS, SQL, OS, and Networks. Building the foundation." },
-  { year: "1st-2nd Year", title: "exploring web development.", line: "React, Node.js, Express, MongoDB, APIs, Git/GitHub. Started building real projects instead of just learning theory." },
-  { year: "2nd Year", title: "building actual products.", line: "Created Bright Code and Creatify. Learning how ideas transform into working applications." },
-  { year: "2nd Year", title: "discovered AI/ML.", line: "NumPy, Pandas, Matplotlib, time-series forecasting, ARIMA, SARIMAX. The world of data science opened up." },
-  { year: "2nd-3rd Year", title: "going deeper into AI.", line: "CNNs, ConvNeXt, ConvLSTM, Computer Vision. Built Demand Forecast and Cyclone Pattern Identifier." },
-  { year: "3rd Year", title: "building complete systems.", line: "Focus shifted from learning languages to building intelligent systems. Strengthening DSA, system design, and production-ready solutions." },
+  {
+    year: "1st Year",
+    phase: "Foundation",
+    title: "Learning the Fundamentals",
+    line: "Programming basics, Java, OOP, DSA, DBMS, SQL, OS, and Networks. Building the core foundation.",
+    badgeClass: "bg-foreground/[0.06] text-foreground border-foreground/20",
+    dotClass: "bg-foreground",
+  },
+  {
+    year: "1st-2nd Year",
+    phase: "Full-Stack",
+    title: "Exploring Web Development",
+    line: "React, Node.js, Express, MongoDB, APIs, Git/GitHub. Started building real projects instead of just theory.",
+    badgeClass: "bg-foreground/[0.06] text-foreground border-foreground/20",
+    dotClass: "bg-foreground",
+  },
+  {
+    year: "2nd Year",
+    phase: "Product Builder",
+    title: "Building Real Products",
+    line: "Created Bright Code and Creatify. Learning how ideas transform into working, user-facing applications.",
+    badgeClass: "bg-foreground/[0.06] text-foreground border-foreground/20",
+    dotClass: "bg-foreground",
+  },
+  {
+    year: "2nd Year",
+    phase: "Data Science",
+    title: "Discovering AI & ML",
+    line: "NumPy, Pandas, Matplotlib, time-series forecasting, ARIMA, SARIMAX. The world of data science opened up.",
+    badgeClass: "bg-foreground/[0.06] text-foreground border-foreground/20",
+    dotClass: "bg-foreground",
+  },
+  {
+    year: "2nd-3rd Year",
+    phase: "Deep Learning",
+    title: "Deepening AI & Vision",
+    line: "CNNs, ConvNeXt, ConvLSTM, Computer Vision. Built Demand Forecast and Cyclone Pattern Identifier.",
+    badgeClass: "bg-foreground/[0.06] text-foreground border-foreground/20",
+    dotClass: "bg-foreground",
+  },
+  {
+    year: "3rd Year",
+    phase: "Intelligent Systems",
+    title: "Complete Intelligent Systems",
+    line: "Focus shifted to end-to-end intelligent architectures. Strengthening DSA, system design, and production engineering.",
+    badgeClass: "bg-foreground/[0.06] text-foreground border-foreground/20",
+    dotClass: "bg-foreground",
+  },
 ];
-const TIMELINE_FROM = 304;
-const TIMELINE_STEP = 18;
-const STEM = 11;
+const TIMELINE_FROM = 124;
+const TIMELINE_STEP = 24;
+const STEM = 7.5;
 
 // The thread curves gently through the years. Each year hangs off it on a thin
-// stem — alternating above and below — and only appears once the thread
-// arrives. Underneath, what all of it keeps adding up to.
+// stem — alternating above and below — and only appears once the thread arrives.
 function TimelineScene() {
   const [ys, setYs] = useState<number[] | null>(null);
 
-  // Hang each stem from exactly where the thread passes.
   useEffect(() => {
-    const { xs, ys: samples } = sampleThread(TIMELINE_FROM - 2, TIMELINE_FROM + TIMELINE_STEP * timeline.length);
+    const { xs, ys: samples } = sampleThread(TIMELINE_FROM - 2, TIMELINE_FROM + TIMELINE_STEP * timeline.length + 4);
     setYs(timeline.map((_, index) => {
       const x = TIMELINE_FROM + index * TIMELINE_STEP;
       let k = 0;
@@ -876,87 +774,108 @@ function TimelineScene() {
 
   return (
     <div>
-      <span hidden data-mode="thread" data-at={306} data-say="the short version. very short." />
+      <span hidden data-mode="thread" data-at={120} data-say="my journey: continuous growth and building." />
+      
+      {/* Journey Overview Header */}
+      <Note x={80} y={16} className="reveal max-w-xs select-none" at={76}>
+        <div className="rounded-2xl border border-border/80 bg-background/95 p-5 shadow-2xl backdrop-blur-md">
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-foreground/40 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground" />
+            </span>
+            <span className="text-[11px] font-mono tracking-widest text-muted-foreground uppercase font-semibold">Evolutionary Path</span>
+          </div>
+          <h2 className="font-serif text-3xl font-medium tracking-tight">The Journey <span className="italic text-muted-foreground">of Growth</span></h2>
+          <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+            From algorithmic basics to real-world architectures and intelligent systems.
+          </p>
+        </div>
+      </Note>
+
+      {/* Interactive Milestones */}
       {ys && timeline.map((stop, index) => {
         const x = TIMELINE_FROM + index * TIMELINE_STEP;
         const y = ys[index] ?? 50;
         const up = index % 2 === 1;
+        const cardY = up ? y - STEM - 1 : y + STEM + 1;
         return (
           <div key={stop.year + stop.title} className="reveal" data-at={x}>
-            <span className="absolute w-px bg-muted-foreground/60" style={{ left: `${x}vw`, top: `${up ? y - STEM : y}vh`, height: `${STEM}vh` }} />
-            <span className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-muted-foreground" style={{ left: `calc(${x}vw + 0.5px)`, top: `${up ? y - STEM : y + STEM}vh` }} />
-            <Note x={x} y={up ? y - STEM - 2 : y + STEM + 2} className={cn("w-64 -translate-x-1/2 text-center leading-snug", up && "-translate-y-full")}>
-              <p className="text-lg">{stop.title}</p>
-              <p className="text-muted-foreground">{stop.line}</p>
-              <p className="mt-1 text-sm text-muted-foreground/80">{stop.year}</p>
+            {/* Thread Attachment Node */}
+            <div
+              className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center"
+              style={{ left: `${x}vw`, top: `${y}vh` }}
+            >
+              <span className={cn("h-3 w-3 rounded-full drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] animate-pulse", stop.dotClass)} />
+              <span className="absolute h-5 w-5 rounded-full border border-foreground/30 animate-ping opacity-40" />
+            </div>
+
+            {/* Fiber Optic Stem */}
+            <span
+              className="absolute w-0.5 bg-gradient-to-b from-foreground/50 via-foreground/20 to-transparent pointer-events-none"
+              style={{
+                left: `${x}vw`,
+                top: `${up ? y - STEM : y}vh`,
+                height: `${STEM}vh`,
+                transform: "translateX(-50%)",
+              }}
+            />
+
+            {/* Milestone Card */}
+            <Note
+              x={x}
+              y={cardY}
+              className={cn(
+                "w-[20rem] -translate-x-1/2 group",
+                up && "-translate-y-full"
+              )}
+            >
+              <div className="rounded-2xl border border-border/80 bg-background/95 p-4 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-foreground/40 hover:shadow-2xl">
+                <div className="flex items-center justify-between mb-2">
+                  <span className={cn("px-2.5 py-0.5 text-[10px] font-mono font-medium rounded-full border tracking-wide uppercase", stop.badgeClass)}>
+                    {stop.year}
+                  </span>
+                  <span className="text-[11px] font-mono text-muted-foreground/60">0{index + 1} // {stop.phase}</span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-foreground tracking-tight">{stop.title}</h3>
+                <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">{stop.line}</p>
+              </div>
             </Note>
           </div>
         );
       })}
-      {/* Each phrase fades in as the thread passes over it, like the years. */}
-      <Note x={302} y={84} className="reveal" at={302}><p className="whitespace-nowrap font-serif text-5xl">my journey, <span className="text-muted-foreground">it's been about...</span></p></Note>
-      <Note x={346} y={84} className="reveal" at={346}><p className="whitespace-nowrap font-serif text-5xl"><span className="text-muted-foreground">constant</span> evolution.</p></Note>
-      <Note x={380} y={83} className="reveal w-[25rem] text-lg leading-snug" at={380}>
-        <p>started by learning how to code.</p>
-        <p>then learned how different technologies work.</p>
-        <p className="text-muted-foreground">now focused on building meaningful products.</p>
-      </Note>
+
     </div>
   );
 }
 
-// The habit that keeps repeating, told as a cycle: the thread ties one big
-// loop beside the line, and the four steps sit around it in the order the
-// thread draws them — bottom, right, top, left — with "repeat." in the middle.
-const LOOP_RX = LOOP_R / LOOP_ASPECT;
-const habit = [
-  { step: "learn it.", x: LOOP_X, y: LOOP_Y, place: "below" },
-  { step: "understand it.", x: LOOP_X + LOOP_RX, y: LOOP_Y - LOOP_R, place: "right" },
-  { step: "build it.", x: LOOP_X, y: LOOP_Y - 2 * LOOP_R, place: "above" },
-  { step: "improve it.", x: LOOP_X - LOOP_RX, y: LOOP_Y - LOOP_R, place: "left" },
-] as const;
 
-const habitLabel = {
-  below: "-translate-x-1/2 translate-y-4",
-  right: "translate-x-5 -translate-y-1/2",
-  above: "-translate-x-1/2 -translate-y-[calc(100%+1rem)]",
-  left: "-translate-x-[calc(100%+1.25rem)] -translate-y-1/2",
-};
-
-function ApparentlyScene() {
-  // The loop is drawn in one go once the thread reaches it, so its steps
-  // arrive one after another, in drawing order.
-  const looped = LOOP_X + LOOP_RX + 1;
-  return (
-    <div>
-      <span hidden data-mode="thread" data-at={looped} data-say="yes, it's a loop. i'm aware." />
-      <Note x={428} y={22} className="reveal w-[32rem]" at={428}>
-        <p className="font-serif text-6xl leading-[1.05]">apparently, <span className="text-muted-foreground">i don't know how to leave things alone.</span></p>
-      </Note>
-      {habit.map(({ step, x, y, place }, index) => (
-        <div key={step} className="reveal" data-mode="thread" data-at={looped} style={{ "--reveal-delay": `${index * 0.25}s` } as CSSProperties}>
-          <span className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground" style={at(x, y)} />
-          <p className={cn("absolute whitespace-nowrap text-lg", habitLabel[place])} style={at(x, y)}>{step}</p>
-        </div>
-      ))}
-      <p className="reveal absolute -translate-x-1/2 -translate-y-1/2 font-serif text-4xl italic" data-mode="thread" data-at={looped} style={{ ...at(LOOP_X, LOOP_Y - LOOP_R), "--reveal-delay": "1s" } as CSSProperties}>repeat.</p>
-    </div>
-  );
-}
-
-// The thread stops. Whitespace. Then the turn into the work.
+// The thread reaches the threshold: the transition into selected works
 function EnoughScene({ onWork }: { onWork: () => void }) {
-  // The button is pinned to the thread's end point (its left edge, halfway
-  // down), so the thread meets it on every screen size; the words sit above.
   return (
     <>
-      <span hidden data-mode="thread" data-at={BUTTON_X - 8} data-say="go on. it's the good part." />
-      <Note x={BUTTON_X + 4.6} y={BUTTON_Y - 6} className="reveal w-[46vw] -translate-x-1/2 -translate-y-full text-center" at={BUTTON_X - 14}>
-        <p className="text-lg text-muted-foreground">enough autobiography.</p>
-        <h2 className="mt-3 font-serif text-6xl">let's look at what came out of it.</h2>
-      </Note>
-      <div className="absolute -translate-y-1/2" style={at(BUTTON_X, BUTTON_Y)}>
-        <Button variant="ink" onClick={onWork} data-cursor="show me the work ↓">see the work <ArrowDown className="ml-2 h-4 w-4" /></Button>
+      <span hidden data-mode="thread" data-at={BUTTON_X - 16} data-say="go on. explore the projects." />
+      
+      {/* Final screen stage from 300vw to 400vw with portrait pinned flush against the right edge */}
+      <div
+        className="reveal absolute top-0 h-screen pointer-events-auto select-none overflow-hidden"
+        style={{ left: "300vw", width: "100vw" }}
+        data-at={BUTTON_X - 45}
+      >
+        <div className="absolute top-0 right-0 h-screen flex items-center justify-center">
+          <img
+            src={beyondCodePortrait}
+            alt="Sachin Yadav portrait line art"
+            className="h-screen w-auto max-w-none object-contain opacity-100 contrast-125 dark:invert dark:opacity-95 pointer-events-none drop-shadow-2xl transition-transform duration-700 ease-out hover:scale-[1.01]"
+          />
+
+          {/* Action button centered at bottom of portrait */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
+            <Button variant="ink" onClick={onWork} data-cursor="explore projects ↓">
+              explore work <ArrowDown className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -1111,64 +1030,7 @@ function Anchor({ x, y, loop }: { x: string; y: number | string; loop?: number }
 // between these heights (px within the tinker block).
 const CLIMB_Y0 = 680;
 const CLIMB_Y1 = 720;
-// The mobile thread's points (in story coordinates), shared with the climber.
-let mobileThread: ThreadSamples | null = null;
 
-// On phones, hold the climber and drag her along her stretch of thread.
-// Only she captures the finger, so the rest of the page still scrolls.
-function MobileClimber() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState(0.55);
-  const [grip, setGrip] = useState<{ x: number; y: number } | null>(null);
-  const [dragging, setDragging] = useState(false);
-  // Put her hands on the drawn thread, at the point nearest the finger
-  // along her stretch.
-  const move = (clientX: number) => {
-    const block = ref.current?.parentElement;
-    const root = block?.parentElement;
-    if (!block || !root || !mobileThread) return;
-    const r = block.getBoundingClientRect();
-    const x = Math.min(r.width * 0.84, Math.max(r.width * 0.2, clientX - r.left));
-    const { xs, ys } = mobileThread;
-    const top = block.offsetTop;
-    let best = -1;
-    for (let i = 0; i < xs.length; i += 1) {
-      const y = (ys[i] ?? 0) - top;
-      const px = xs[i] ?? 0;
-      if (y < CLIMB_Y0 - 90 || y > CLIMB_Y1 + 90 || px < r.width * 0.2 || px > r.width * 0.84) continue;
-      if (best < 0 || Math.abs((xs[i] ?? 0) - x) < Math.abs((xs[best] ?? 0) - x)) best = i;
-    }
-    if (best < 0) return;
-    setPos((xs[best] ?? 0) / r.width);
-    setGrip({ x: xs[best] ?? 0, y: (ys[best] ?? 0) - top });
-  };
-  const y = grip ? grip.y : CLIMB_Y0 + (CLIMB_Y1 - CLIMB_Y0) * pos + Math.sin(pos * Math.PI) * 14;
-  return (
-    <div
-      ref={ref}
-      className="absolute h-[156px] w-24 touch-none"
-      style={{ left: grip ? grip.x : `${pos * 100}%`, top: y, translate: `-${GRIP_X * 100}% -${GRIP_Y * 100}%`, transition: dragging ? "none" : "left .4s, top .4s" }}
-      onPointerDown={(e) => {
-        e.currentTarget.setPointerCapture(e.pointerId);
-        setDragging(true);
-      }}
-      onPointerMove={(e) => dragging && move(e.clientX)}
-      onPointerUp={() => setDragging(false)}
-      onPointerCancel={() => setDragging(false)}
-    >
-      <Figure
-        src={climber}
-        alt="someone hanging from the thread"
-        label="apparently i like climbing things."
-        size="fill"
-        hang={!dragging}
-        still={dragging}
-        // wherever she's climbed to, keep her bubble on screen
-        labelStyle={pos < 0.35 ? { left: 0, translate: "none" } : pos > 0.65 ? { left: "auto", right: 0, translate: "none" } : {}}
-      />
-    </div>
-  );
-}
 
 function MobileStory({ ready, onWork }: { ready: boolean; onWork: () => void }) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -1197,7 +1059,6 @@ function MobileStory({ ready, onWork }: { ready: boolean; onWork: () => void }) 
       });
       const segments = threadSegments(points, 1, 1);
       samplesRef.current = sampleSegments(segments, 24);
-      mobileThread = samplesRef.current;
       setGeo({ d: segmentsPath(segments), w: r.width, h: r.height });
     };
     measure();
@@ -1295,257 +1156,297 @@ function MobileStory({ ready, onWork }: { ready: boolean; onWork: () => void }) 
         <Anchor x="93%" y="122svh" />
       </div>
 
-      {/* i tinker with a lot of stuff — objects spread out on alternating sides */}
-      <div className="relative h-[880px]">
-        <span data-say="careful. rabbit holes ahead." className="absolute left-0 top-0 h-px w-px" />
-        <MobileObject src={laptop} alt="a laptop covered in stickers" label="this is where most things begin." style={{ left: "3%", top: 20 }} delay="0s" />
-        <MobileObject src={keys} alt="a set of keycaps" label="one more idea. just one." style={{ right: "5%", top: 190 }} delay=".4s" />
-        <Anchor x="95%" y={400} />
-        <div className="reveal absolute inset-x-0 top-[420px] mx-auto max-w-[17rem] text-center">
-          <p className="text-muted-foreground">i tinker with a lot of stuff.</p>
-          <h2 className="mt-1 whitespace-nowrap font-serif text-[2.1rem] leading-tight">a jack of all trades</h2>
-          <p className="mt-1 text-sm text-muted-foreground">what a cool way to say i fall down rabbit holes.</p>
-        </div>
-        <Anchor x="95%" y={590} />
-        {/* the climber gets her own stretch of thread to be dragged along */}
-        <Anchor x="4%" y={CLIMB_Y0} />
-        <MobileClimber />
-        <Anchor x="96%" y={CLIMB_Y1} />
+      {/* transition section */}
+      <div className="relative h-[180px]">
+        <span data-say="exploring new technologies." className="absolute left-0 top-0 h-px w-px" />
+        <Anchor x="25%" y={40} />
+        <Anchor x="75%" y={120} />
       </div>
 
-      {/* but few things have my heart — object above its words, alternating sides */}
-      <div className="relative px-5 pt-6">
-        <span data-say="okay, the soft part." className="absolute left-0 top-0 h-px w-px" />
-        <Anchor x="5%" y={0} />
-        <Anchor x="5%" y={110} />
-        <h2 className="reveal text-center font-serif text-[2.4rem] leading-none">but few things<br />have my heart.</h2>
-        {heart.map((h, index) => {
-          const right = index % 2 === 1;
-          return (
-            <div key={h.title} className={cn("reveal relative mt-10 w-[66%]", right && "ml-auto text-right")}>
-              <div className={cn("relative w-fit", right && "ml-auto")}>
-                <Figure src={h.src} alt={h.alt} label={h.label} size="sm" delay={`${index * 0.5}s`} />
-                <span data-anchor className="absolute left-1/2 top-1/2" />
-              </div>
-              <p className="font-serif text-2xl leading-tight">{h.title}</p>
-              <p className="mt-1 text-sm leading-snug text-muted-foreground">{h.body}</p>
-              {/* leave along the outer edge, below the words */}
-              <Anchor x={right ? "calc(100% + 0.25rem)" : "-0.25rem"} y="calc(100% + 0.75rem)" />
-            </div>
-          );
-        })}
-      </div>
-
-      {/* somehow, i keep ending up... — the years hang off the thread */}
-      <div className="relative mt-20 px-5">
-        <span data-say="the short version. very short." className="absolute left-0 top-20 h-px w-px" />
+      {/* my journey — the years hang off the thread */}
+      <div className="relative mt-12 px-5">
+        <span data-say="my journey: continuous growth and building." className="absolute left-0 top-20 h-px w-px" />
         <Anchor x="6%" y={-20} />
-        <p className="reveal mx-auto max-w-[18rem] text-center font-serif text-[2rem] leading-tight">somehow,<br /><span className="text-muted-foreground">i keep ending up...</span></p>
-        <ol className="relative mt-10 pl-9">
-          {timeline.map((stop) => (
-            <li key={stop.year + stop.title} className="reveal relative pb-7">
-              <span data-anchor className="absolute -left-[1.1rem] top-[0.7rem]" />
-              <span aria-hidden="true" className="absolute -left-[1.1rem] top-[0.7rem] h-px w-3 bg-muted-foreground/60" />
-              <span aria-hidden="true" className="absolute left-[-0.4rem] top-[0.55rem] h-1.5 w-1.5 rounded-full bg-muted-foreground" />
-              <p>{stop.title}</p>
-              <p className="text-sm leading-snug text-muted-foreground">{stop.line}</p>
-              <p className="mt-0.5 text-xs text-muted-foreground/80">{stop.year}</p>
+        <div className="reveal mx-auto max-w-[20rem] text-center mb-6">
+          <span className="px-2.5 py-0.5 text-[10px] font-mono font-medium rounded-full bg-foreground/[0.06] text-foreground border border-foreground/20 uppercase tracking-wider inline-block mb-1.5">Evolutionary Path</span>
+          <h2 className="font-serif text-3xl font-medium leading-tight">The Journey <span className="italic text-muted-foreground">of Growth</span></h2>
+        </div>
+        <ol className="relative pl-4 space-y-4">
+          {timeline.map((stop, index) => (
+            <li key={stop.year + stop.title} className="reveal relative pl-6 pb-2">
+              <span data-anchor className="absolute left-0 top-3" />
+              <span className={cn("absolute left-0 top-2.5 h-2.5 w-2.5 rounded-full -translate-x-1/2 drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]", stop.dotClass)} />
+              <div className="rounded-xl border border-border/80 bg-background/90 p-3.5 shadow-md backdrop-blur-sm">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className={cn("px-2 py-0.5 text-[9px] font-mono font-medium rounded-full border uppercase tracking-wider", stop.badgeClass)}>
+                    {stop.year}
+                  </span>
+                  <span className="text-[10px] font-mono text-muted-foreground/60">0{index + 1} // {stop.phase}</span>
+                </div>
+                <h3 className="font-serif text-base font-medium">{stop.title}</h3>
+                <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{stop.line}</p>
+              </div>
             </li>
           ))}
         </ol>
         <Anchor x="6%" y="100%" />
       </div>
-      <div className="relative px-5 pt-4">
-        <p className="reveal text-center font-serif text-[2rem]"><span className="text-muted-foreground">...taking</span> ownership.</p>
-        <div className="reveal mx-auto mt-3 max-w-[19rem] text-center text-sm leading-snug">
-          <p>most things i got curious about, i ended up building.</p>
-          <p className="text-muted-foreground">most things i built, i ended up looking after.</p>
-        </div>
-        <Anchor x="5%" y="calc(100% + 1rem)" />
-      </div>
 
-      {/* apparently, i don't know how to leave things alone — tied in a loop */}
-      <div className="relative mt-16 px-5">
-        <Anchor x="89%" y={-24} />
-        <Anchor x="90%" y={150} />
-        <p className="reveal font-serif text-[2.3rem] leading-[1.05]">apparently, <span className="text-muted-foreground">i don't know how to leave things alone.</span></p>
-        <div className="reveal relative mt-4 h-[270px]">
-          <span data-say="yes, it's a loop. i'm aware." className="absolute left-0 top-1/2 h-px w-px" />
-          <Anchor x="86%" y={205} />
-          <Anchor x="50%" y={230} loop={MOBILE_LOOP} />
-          <span className="absolute -translate-x-1/2 translate-y-3 whitespace-nowrap text-sm" style={{ left: "50%", top: 230 }}>notice it.</span>
-          <span className="absolute -translate-y-1/2 whitespace-nowrap text-sm" style={{ left: `calc(50% + ${MOBILE_LOOP + 10}px)`, top: 230 - MOBILE_LOOP }}>understand it.</span>
-          <span className="absolute -translate-x-1/2 -translate-y-[calc(100%+0.6rem)] whitespace-nowrap text-sm" style={{ left: "50%", top: 230 - 2 * MOBILE_LOOP }}>build it.</span>
-          <span className="absolute -translate-x-[calc(100%+0.6rem)] -translate-y-1/2 whitespace-nowrap text-sm" style={{ left: `calc(50% - ${MOBILE_LOOP}px)`, top: 230 - MOBILE_LOOP }}>hand it over.</span>
-          <span className="absolute -translate-x-1/2 -translate-y-1/2 font-serif text-2xl italic" style={{ left: "50%", top: 230 - MOBILE_LOOP }}>repeat.</span>
-        </div>
-      </div>
 
-      {/* enough autobiography — the thread ends at the button */}
-      <div className="relative px-5 pb-24 pt-14 text-center">
-        <span data-say="go on. it's the good part." className="absolute left-0 top-10 h-px w-px" />
+      {/* the thread ends at the work transition */}
+      <div className="relative px-4 pb-20 pt-10 text-center flex flex-col items-center justify-center min-h-[90vh]">
+        <span data-say="go on. explore the projects." className="absolute left-0 top-10 h-px w-px" />
         <Anchor x="94%" y={40} />
-        <p className="reveal text-sm text-muted-foreground">enough autobiography.</p>
-        <h2 className="reveal mt-2 font-serif text-[2.3rem] leading-tight">let's look at what<br />came out of it.</h2>
-        <div className="relative mt-7 inline-block">
-          <span data-anchor className="absolute left-[calc(100%+2.75rem)] top-[-0.25rem]" />
-          <span data-anchor className="absolute left-full top-1/2" />
-          <Button variant="ink" onClick={onWork}>see the work <ArrowDown className="ml-2 h-4 w-4" /></Button>
+        {/* FULL-HEIGHT PORTRAIT ON MOBILE - NO TEXT OVERLAY */}
+        <div className="reveal relative mx-auto w-full h-[78vh] flex items-center justify-center overflow-hidden">
+          <img
+            src={beyondCodePortrait}
+            alt="Sachin Yadav portrait line art"
+            className="h-full w-auto max-h-[78vh] object-contain opacity-100 contrast-125 dark:invert dark:opacity-95"
+          />
+        </div>
+
+        {/* Clean action button below portrait */}
+        <div className="mt-6 z-10">
+          <Button variant="ink" onClick={onWork}>
+            explore work <ArrowDown className="ml-2 h-4 w-4" />
+          </Button>
         </div>
       </div>
     </div>
   );
 }
 
-function Works({ filter, setFilter }: { filter: string; setFilter: (filter: string) => void }) {
-  const filtered = filter === "All" ? projects : projects.filter((project) => project.tags.includes(filter));
+function WorkSection() {
+  const portfolioProjects = [
+    {
+      number: "01",
+      tag: "FULL-STACK & COLLABORATION",
+      title: "Bright Code",
+      blurb: "Real-time collaborative coding platform with live sync & interactive workspaces.",
+      description:
+        "A collaborative coding platform designed to help developers write, practice, and work on code efficiently in an interactive environment. Built with React, Node.js, Express, and MongoDB.",
+      stack: ["React", "Node.js", "Express", "MongoDB", "Socket.io", "Monaco Editor"],
+      shot: voxieShot,
+      object: laptop,
+      live: "https://bright-code-ruby.vercel.app/",
+      code: "https://github.com/SachinYadav2446/BrightCode",
+    },
+    {
+      number: "02",
+      tag: "GEOSPATIAL & TELEMETRY",
+      title: "JalDrishti",
+      blurb: "Real-time groundwater resource evaluation from DWLR telemetry — Ministry of Jal Shakti.",
+      description:
+        "Automated telemetric groundwater resource evaluation platform analyzing Digital Water Level Recorder (DWLR) sensors across India-WRIS. Ingests 2.4M+ daily telemetry observations from 3,200+ stations, computing GEC-2015 recharge calculations, sensor health triage, and 90-day predictive aquifer trends.",
+      stack: ["Python", "Django REST", "React Native / Expo", "DWLR Telemetry", "India-WRIS", "Geospatial Analytics"],
+      shot: jaldrishtiShot,
+      object: globe,
+      code: "https://github.com/SachinYadav2446/JalDrishti",
+    },
+    {
+      number: "03",
+      tag: "AI / COMPUTER VISION",
+      title: "Cyclone Pattern Identifier",
+      blurb: "Satellite cyclone intensity & pattern analysis with temporal deep learning.",
+      description:
+        "An AI-based system for detecting and analyzing cyclone patterns from satellite imagery, including cyclone eye localization, intensity estimation, and forecasting up to 48 hours. Built with PyTorch, ConvNeXt, and ConvLSTM.",
+      stack: ["PyTorch", "ConvNeXt", "ConvLSTM", "OpenCV", "Satellite Vision", "Deep Learning"],
+      shot: rexShot,
+      object: earth,
+      code: "https://github.com/SachinYadav2446/Cyclone-Pattern-Identifier",
+    },
+    {
+      number: "04",
+      tag: "MACHINE LEARNING & TIME-SERIES",
+      title: "Demand Forecast",
+      blurb: "Spatial-temporal urban taxi demand intelligence and predictive modeling.",
+      description:
+        "A taxi demand forecasting system that predicts zone-wise future demand using historical NYC taxi trip data and time-series forecasting techniques with ARIMA and SARIMAX models.",
+      stack: ["Python", "ARIMA", "SARIMAX", "Pandas", "Scikit-Learn", "Time-Series"],
+      shot: screenmeshShot,
+      object: brain,
+      code: "https://github.com/SachinYadav2446/Taxi-Demand-Forecasting-System-",
+    },
+    {
+      number: "05",
+      tag: "CREATIVE WEB PLATFORM",
+      title: "Creatify",
+      blurb: "Interactive media canvas and dynamic digital content creation engine.",
+      description:
+        "A creative digital platform focused on helping users create and manage engaging digital content through an intuitive and interactive interface built with React and modern web technologies.",
+      stack: ["React", "TypeScript", "Tailwind CSS", "Canvas API", "Vite"],
+      shot: clinaraShot,
+      object: sparkles,
+      code: "https://github.com/SachinYadav2446/Creatify",
+    },
+    {
+      number: "06",
+      tag: "JAVA & CORE CS FOUNDATIONS",
+      title: "Java Basic Projects",
+      blurb: "Modular repository of core Java implementations, OOP patterns, and data structure algorithms.",
+      description:
+        "A structured collection of 12 progressive Java applications demonstrating object-oriented programming, data structures, and algorithmic patterns — spanning banking systems, sorting/searching algorithms, e-commerce catalogs, and library management.",
+      stack: ["Java", "OOP Principles", "Data Structures", "Algorithms", "Banking System", "E-Commerce"],
+      shot: javaBasicsShot,
+      object: code,
+      code: "https://github.com/SachinYadav2446/Java-basic-Projects",
+    },
+    {
+      number: "07",
+      tag: "JAVASCRIPT & DOM ENGINEERING",
+      title: "JavaScript Basic Projects",
+      blurb: "Hands-on suite of vanilla JavaScript web applications and asynchronous utilities.",
+      description:
+        "A comprehensive practical laboratory of JavaScript projects focusing on core DOM engineering, asynchronous REST API consumers (weather app), financial budgeting tools (bill splitter, expense tracker), and game mechanics.",
+      stack: ["JavaScript", "DOM API", "Async/Await", "Fetch API", "Local Storage", "Event Loop"],
+      shot: jsBasicsShot,
+      object: console_,
+      code: "https://github.com/SachinYadav2446/JS-Projects-Basics-",
+    },
+  ];
+
   return (
-    <section id="work" className="relative min-h-screen border-t border-foreground bg-background px-5 pb-24 pt-28 sm:px-8">
-      <div className="pointer-events-none absolute inset-x-0 top-0 overflow-hidden" aria-hidden="true"><p className="translate-y-[-38%] whitespace-nowrap text-[26vw] font-semibold leading-none text-muted">WORKS</p></div>
-      <div className="relative mx-auto grid max-w-[1500px] gap-16 pt-[18vw] lg:grid-cols-[minmax(280px,0.65fr)_minmax(0,1.35fr)]">
-        <aside className="h-fit lg:sticky lg:top-28">
-          <p className="text-sm text-muted-foreground">selected work / 2022—now</p>
-          <h2 className="mt-4 max-w-md font-serif text-5xl leading-none sm:text-6xl">a few things,<br /><em>chosen on purpose.</em></h2>
-          <p className="mt-8 max-w-sm text-muted-foreground">AI, privacy, and open source, built end to end.</p>
-          <p className="mb-3 mt-10 text-sm">show me</p>
-          <div className="flex flex-wrap gap-2">
-            {["All", "AI", "Privacy", "Open source"].map((item) => <Button key={item} variant="filter" data-active={filter === item} onClick={() => setFilter(item)} data-cursor={`filter: ${item.toLowerCase()}`}>{item}</Button>)}
-          </div>
-        </aside>
-        <div className="grid gap-20">
-          {filtered.map((project) => (
-            <article key={project.title} className="group">
-              <a href={project.live} target="_blank" rel="noreferrer" className="block overflow-hidden border border-border bg-muted" data-cursor="see it live ↗">
-                <img src={project.image} alt={`${project.title} website`} loading="lazy" width={1200} height={912} className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]" />
-              </a>
-              <div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-5">
-                <div className="min-w-0"><p className="text-xs text-muted-foreground">{project.number} / {project.tags.join(" · ")}</p><h3 className="mt-1 font-serif text-4xl">{project.title}</h3><p className="mt-2 max-w-xl text-muted-foreground">{project.blurb}</p></div>
-                <Button asChild variant="paper" size="icon"><a href={project.code} target="_blank" rel="noreferrer" aria-label={`${project.title} on GitHub`} data-cursor="read the code ↗"><ArrowUpRight className="h-5 w-5" /></a></Button>
+    <section id="work" className="relative min-h-screen border-t border-border/80 bg-background px-5 pb-36 pt-32 sm:px-8 sm:pb-48 lg:px-16 overflow-visible">
+      {/* Architectural Background Watermark Backdrop */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 overflow-hidden select-none opacity-[0.06] dark:opacity-[0.08]" aria-hidden="true">
+        <div className="mx-auto flex max-w-[1300px] items-center justify-between px-5 pt-7 font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-foreground/75">
+          <span>// 01 — 07</span>
+          <span>DEPLOYED ARCHITECTURES</span>
+          <span className="hidden sm:inline">[ AI &amp; CODE ]</span>
+        </div>
+        <p className="whitespace-nowrap text-center font-serif italic text-[15vw] tracking-tight leading-[0.85] text-transparent [-webkit-text-stroke:1.2px_currentColor] text-foreground select-none">
+          Creations
+        </p>
+      </div>
+
+      <div className="relative mx-auto max-w-[1300px]">
+        {/* Editorial Section Header */}
+        <div className="max-w-3xl pt-2">
+          <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-medium tracking-tight text-foreground leading-[1.08]">
+            Architecting software with <br />
+            <span className="italic font-normal text-muted-foreground">scalable engineering</span> & applied AI.
+          </h2>
+
+          <p className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
+            A curated portfolio of full-stack production platforms, deep learning computer vision systems, and predictive time-series pipelines built for resilience and real-world impact.
+          </p>
+        </div>
+
+        {/* Stacking Cards Container */}
+        <div className="relative mt-16 sm:mt-20 space-y-12 sm:space-y-16">
+          {portfolioProjects.map((project, index) => (
+            <div
+              key={project.title}
+              className="sticky transition-all duration-300"
+              style={{
+                top: `calc(2.5rem + ${index * 0.85}rem)`,
+                zIndex: 10 + index,
+              }}
+            >
+              <div className="group relative overflow-hidden rounded-3xl border border-border/80 bg-background/95 dark:bg-zinc-950/95 p-5 sm:p-7 lg:p-8 shadow-2xl shadow-black/10 dark:shadow-black/70 backdrop-blur-xl transition-all duration-300 hover:border-foreground/40">
+                {/* Card Top Pill Header */}
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-4 mb-6">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <span className="rounded-md border border-border/70 bg-foreground/[0.04] px-2.5 py-0.5 font-mono text-xs font-bold text-foreground">
+                      {project.number}
+                    </span>
+                    <span className="font-mono text-xs font-semibold tracking-wider text-muted-foreground/80 uppercase">
+                      {project.tag}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {project.live ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-0.5 text-[11px] font-mono font-medium text-emerald-600 dark:text-emerald-400">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        LIVE APPLICATION
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-foreground/[0.04] px-3 py-0.5 text-[11px] font-mono text-muted-foreground">
+                        OPEN SOURCE ARCHITECTURE
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Card Content Grid */}
+                <div className="grid gap-6 lg:gap-8 lg:grid-cols-12 lg:items-center">
+                  {/* Left Column: Project details */}
+                  <div className="lg:col-span-7 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-foreground">
+                        {project.title}
+                      </h3>
+                      <p className="mt-2 text-sm sm:text-base font-medium text-foreground/80">
+                        {project.blurb}
+                      </p>
+                      <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                        {project.description}
+                      </p>
+
+                      {/* Tech stack badges */}
+                      <div className="mt-5">
+                        <span className="block font-mono text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-1.5">
+                          Core Architecture & Stack
+                        </span>
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                          {project.stack.map((tech) => (
+                            <span
+                              key={tech}
+                              className="rounded-lg border border-border/70 bg-foreground/[0.03] px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground transition-colors group-hover:text-foreground group-hover:border-foreground/30"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Links */}
+                    <div className="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-border/40 relative z-20">
+                      {project.live && (
+                        <a
+                          href={project.live}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-xl bg-foreground px-4 py-2.5 text-xs font-mono font-medium text-background transition hover:bg-foreground/85 shadow-sm active:scale-95"
+                          data-cursor="view live application ↗"
+                        >
+                          Live Demo <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                      )}
+                      {project.code && (
+                        <a
+                          href={project.code}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-background/80 px-4 py-2.5 text-xs font-mono font-medium text-foreground transition hover:bg-foreground/5 hover:border-foreground/40 shadow-sm active:scale-95"
+                          data-cursor="explore source code ↗"
+                        >
+                          Source Code <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Visual screenshot preview */}
+                  <div className="lg:col-span-5 relative">
+                    <div className="group/shot relative overflow-hidden rounded-2xl border border-border/80 bg-zinc-950/40 shadow-lg">
+                      <img
+                        src={project.shot}
+                        alt={`${project.title} screenshot`}
+                        className="aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover/shot:scale-105"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-            </article>
+            </div>
           ))}
-          {filtered.length === 0 && <p className="py-24 text-muted-foreground">That shelf is being rearranged. Try another filter.</p>}
-          {/* the way down to everything else */}
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-border pt-10">
-            <p className="font-serif text-3xl">interested? <span className="text-muted-foreground">there's more.</span></p>
-            <RabbitHoleButton />
-          </div>
         </div>
       </div>
     </section>
-  );
-}
-
-// Where the closing thread ends — her raised hand — in vw/vh of the section's
-// first screen. The photo is pinned so that hand lands exactly on this point.
-const HAND_X = 78;
-const HAND_Y = 20;
-
-// What I say as people keep playing with the cutout — one line per stretch,
-// getting less patient, until it's time to just talk.
-const meLines = [
-  "oh, hi. you found me.",
-  "hey, careful.",
-  "okay, that tickles.",
-  "you're enjoying this, aren't you?",
-  "i'm a developer, not a rubber band.",
-  `okay, enough. let's connect? ↓ ${EMAIL}`,
-];
-
-// My cutout, pinned by the raised hand. Hover and it pops forward and says
-// hi; grab and drag to stretch it like rubber from that hand, and it springs
-// back on release. Every stretch gets a new (less patient) line.
-function MeCutout({ visible, phone = false, imgRef }: { visible: boolean; phone?: boolean; imgRef?: RefObject<HTMLImageElement | null> }) {
-  const start = useRef<{ x: number; y: number } | null>(null);
-  const [pull, setPull] = useState({ x: 0, y: 0 });
-  const [dragging, setDragging] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [stretches, setStretches] = useState(0);
-  const [typed, setTyped] = useState("");
-
-  // Stretch along the pull, squeezing the other way so it feels like rubber.
-  const stretch = Math.min(1.8, Math.max(0.6, 1 + pull.y / 400));
-  const squeeze = 1 / Math.sqrt(stretch);
-  const lean = Math.max(-25, Math.min(25, pull.x / 12));
-
-  const pulledHard = dragging && (stretch > 1.5 || stretch < 0.7 || Math.abs(lean) > 20);
-  const line = pulledHard ? "ow. that's not how bodies work." : meLines[Math.min(stretches, meLines.length - 1)]!;
-  const talking = hovered || dragging;
-  useEffect(() => {
-    if (talking) quietOthers(-2);
-  }, [talking]);
-
-  // Type each new line out, like the other objects' confessions.
-  useEffect(() => {
-    if (!talking) {
-      setTyped("");
-      return;
-    }
-    let index = 0;
-    const timer = window.setInterval(() => {
-      index += 1;
-      setTyped(line.slice(0, index));
-      if (index >= line.length) window.clearInterval(timer);
-    }, 26);
-    return () => window.clearInterval(timer);
-  }, [talking, line]);
-
-  const letGo = () => {
-    if (start.current && (Math.abs(pull.x) > 20 || Math.abs(pull.y) > 20)) setStretches((n) => n + 1);
-    start.current = null;
-    setDragging(false);
-    setPull({ x: 0, y: 0 });
-  };
-
-  return (
-    <>
-      <div
-        aria-live="polite"
-        style={phone ? { left: "-0.5rem", top: "22%", transitionTimingFunction: "cubic-bezier(.34,1.56,.64,1)" } : { left: `${HAND_X - 4}vw`, top: `${HAND_Y + 16}vh`, transitionTimingFunction: "cubic-bezier(.34,1.56,.64,1)" }}
-        className={cn(
-          "absolute z-10 w-max max-w-[16rem] -translate-x-full whitespace-pre-line rounded-[18px_18px_5px_18px] border border-cursor-border bg-cursor px-4 py-2 text-sm text-cursor-foreground shadow-lg transition-[opacity,scale] duration-300",
-          phone && "max-w-[calc(42vw-1.5rem)]",
-          talking ? "scale-100 opacity-100" : "scale-90 opacity-0",
-        )}
-      >
-        {typed}
-        <span className="animate-pulse">|</span>
-      </div>
-      <img
-        ref={imgRef}
-        src={me}
-        alt="nidhi, one hand up in a peace sign, holding the end of the thread"
-        draggable={false}
-        onContextMenu={(e) => e.preventDefault()}
-        data-cursor=""
-        onPointerEnter={() => setHovered(true)}
-        onPointerLeave={() => setHovered(false)}
-        onPointerDown={(e) => {
-          e.currentTarget.setPointerCapture(e.pointerId);
-          start.current = { x: e.clientX, y: e.clientY };
-          setDragging(true);
-        }}
-        onPointerMove={(e) => {
-          if (!start.current) return;
-          setPull({ x: e.clientX - start.current.x, y: e.clientY - start.current.y });
-        }}
-        onPointerUp={letGo}
-        onPointerCancel={letGo}
-        className={cn(
-          phone ? "relative block h-auto w-full touch-none select-none" : "pointer-events-auto absolute h-[76vh] w-auto max-w-none touch-none select-none",
-          dragging ? "cursor-grabbing" : "cursor-grab",
-          visible ? "opacity-100" : "opacity-0",
-        )}
-        style={{
-          ...(phone ? {} : { left: `${HAND_X}vw`, top: `${HAND_Y}vh`, translate: "-41% -2%" }),
-          transformOrigin: "41% 2%",
-          transform: `skewX(${-lean}deg) scale(${(hovered && !dragging ? 1.04 : 1) * squeeze}, ${(hovered && !dragging ? 1.04 : 1) * stretch})`,
-          filter: talking ? "drop-shadow(0 24px 30px rgb(0 0 0 / 0.22))" : "drop-shadow(0 6px 10px rgb(0 0 0 / 0.08))",
-          // Follow the finger instantly while dragging; wobble back when let go.
-          transition: dragging ? "filter .3s" : "transform .9s cubic-bezier(.2,2.2,.4,.8), filter .3s, opacity .4s",
-        }}
-      />
-    </>
   );
 }
 
@@ -1570,184 +1471,322 @@ function ScribbleArrow({ d, head, className, style }: { d: string; head: string;
 
 const pill = "inline-flex items-center justify-between gap-10 rounded-xl px-5 text-[1.05rem] transition-colors";
 
-// 10 — the end. "oh, hi. i'm nidhi." — and the thread leaves the "hi." and
-// waves its way across into my raised hand. Margin notes scribbled around it.
+// The closing section: user arrives to Sachin's portrait front & center.
+// On scroll, the section stays pinned while the photo recedes into the background
+// and the original open-canvas text ("oh, hi. i'm sachin...") smoothly emerges.
 function OhHi() {
-  const ref = useRef<HTMLElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
-  const hiRef = useRef<HTMLSpanElement>(null);
-  // Only the two moments that change the layout go through React: the words
-  // arriving, and the thread reaching my hand.
-  const [stage, setStage] = useState({ seen: false, reached: false });
-  const [thread, setThread] = useState("");
-  const seen = stage.seen;
-  // Phones: the thread runs down the page from "oh, hi." into my raised hand.
-  const phoneImgRef = useRef<HTMLImageElement>(null);
-  const phonePathRef = useRef<SVGPathElement>(null);
-  const [phoneThread, setPhoneThread] = useState<{ d: string; y0: number; y1: number; w: number; h: number } | null>(null);
-  const [phoneReached, setPhoneReached] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const photoRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const backToTopRef = useRef<HTMLButtonElement>(null);
+  const [copied, setCopied] = useState(false);
 
-  // The thread starts right after "oh, hi." — wherever the type lands on this
-  // screen — so measure it, then wave through to the hand.
-  useEffect(() => {
-    const measure = () => {
-      const hi = hiRef.current;
-      const section = ref.current;
-      if (!hi || !section) return;
-      const r = hi.getBoundingClientRect();
-      const q = section.getBoundingClientRect();
-      const sx = ((r.right - q.left) / window.innerWidth) * 100 + 0.8;
-      const sy = ((r.top - q.top + r.height * 0.55) / window.innerHeight) * 100;
-      // On phones, trace it in pixels: out of the "hi.", down the right edge,
-      // and hook into the hand (41% across, 2% down the cutout).
-      const img = phoneImgRef.current;
-      if (window.innerWidth < 768 && img) {
-        const m = img.getBoundingClientRect();
-        const w = q.width;
-        const start: Waypoint = [r.right - q.left + 6, r.top - q.top + r.height * 0.55];
-        const hand: Waypoint = [m.left - q.left + m.width * 0.41, m.top - q.top + m.height * 0.02];
-        const d = segmentsPath(threadSegments([start, [w * 0.9, start[1] + 36], [w * 0.95, (start[1] + hand[1]) / 2], [hand[0] + 44, hand[1] - 80], hand], 1, 1));
-        setPhoneThread({ d, y0: start[1], y1: hand[1], w, h: q.height });
-      }
-      const crest = Math.max(sx + 6, 31);
-      setThread(threadPath([[sx, sy], [crest, sy - 4], [crest + 14, 36], [59, 51.5], [68, 38], [72.5, HAND_Y + 3], [HAND_X - 2.5, HAND_Y + 0.2], [HAND_X, HAND_Y]]));
-    };
-    measure();
-    void document.fonts?.ready.then(measure);
-    // The cutout has no height until it loads, so trace again once it has.
-    const photo = phoneImgRef.current;
-    photo?.addEventListener("load", measure);
-    window.addEventListener("resize", measure);
-    return () => {
-      photo?.removeEventListener("load", measure);
-      window.removeEventListener("resize", measure);
-    };
-  }, []);
+  const handleCopyEmail = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    void navigator.clipboard?.writeText(EMAIL);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2200);
+  };
 
   useEffect(() => {
-    if (!phoneThread) return;
     let frame = 0;
-    const draw = () => {
+    const tick = () => {
       frame = 0;
-      const node = ref.current;
-      const path = phonePathRef.current;
-      if (!node || !path) return;
-      const top = node.getBoundingClientRect().top;
-      const p = Math.min(1, Math.max(0, (window.innerHeight * 0.72 - (top + phoneThread.y0)) / Math.max(1, phoneThread.y1 - phoneThread.y0)));
-      path.style.strokeDashoffset = `${1 - p}`;
-      setPhoneReached(p >= 0.98);
+      const node = sectionRef.current;
+      if (!node) return;
+      const rect = node.getBoundingClientRect();
+      const distance = node.offsetHeight - window.innerHeight;
+      const p = Math.min(1, Math.max(0, -rect.top / Math.max(1, distance)));
+
+      // Moment 1 (Arrival, p from 0 to ~0.15): Photo is front & center. Text is hidden.
+      // Moment 2 (On scroll, p from 0.15 to ~0.72): Section stays pinned.
+      // Image DOES NOT FADE (stays 100% crisp & visible). On desktop, it shifts to the right
+      // leaving room for the OG text to smoothly appear on the left.
+      const isDesktop = window.innerWidth >= 768;
+      const t = Math.min(1, Math.max(0, (p - 0.12) / 0.52));
+      const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+      if (photoRef.current) {
+        if (isDesktop) {
+          const shiftX = ease * 26; // shifts 26vw to the right
+          const scale = 1 - ease * 0.04;
+          photoRef.current.style.transform = `translate3d(${shiftX}vw, 0, 0) scale(${scale})`;
+          photoRef.current.style.opacity = "1";
+          photoRef.current.style.filter = "none";
+        } else {
+          const translateY = ease * -10;
+          const scale = 1 - ease * 0.05;
+          photoRef.current.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
+          photoRef.current.style.opacity = "1";
+          photoRef.current.style.filter = "none";
+        }
+      }
+
+      const textT = Math.min(1, Math.max(0, (p - 0.18) / 0.46));
+      const textEase = textT < 0.5 ? 2 * textT * textT : 1 - Math.pow(-2 * textT + 2, 2) / 2;
+      const translateY = (1 - textEase) * 26;
+
+      if (textRef.current) {
+        textRef.current.style.opacity = `${textEase}`;
+        textRef.current.style.transform = `translate3d(0, ${translateY}px, 0)`;
+        textRef.current.style.pointerEvents = textT > 0.4 ? "auto" : "none";
+      }
+
+      if (backToTopRef.current) {
+        backToTopRef.current.style.opacity = `${textEase}`;
+        backToTopRef.current.style.pointerEvents = textT > 0.4 ? "auto" : "none";
+      }
     };
+
     const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(draw);
+      if (!frame) frame = requestAnimationFrame(tick);
     };
-    draw();
+
+    // ── Scroll-trap ──────────────────────────────────────────────────────────
+    // Intercept wheel & touch events while this section is in play so a fast
+    // scroll can't skip past the portrait animation entirely.
+    let touchStartY = 0;
+
+    const onWheel = (e: WheelEvent) => {
+      const node = sectionRef.current;
+      if (!node) return;
+
+      const sectionTop = node.offsetTop;
+      const sectionHeight = node.offsetHeight;
+      const vh = window.innerHeight;
+      const scrollTop = window.scrollY;
+
+      const sectionScrollEnd = sectionTop + sectionHeight - vh;
+
+      const insideSection = scrollTop >= sectionTop && scrollTop <= sectionScrollEnd;
+      const justAbove = scrollTop < sectionTop && scrollTop > sectionTop - vh && e.deltaY > 0;
+      const justBelow = scrollTop > sectionScrollEnd && scrollTop < sectionScrollEnd + vh && e.deltaY < 0;
+
+      if (insideSection || justAbove || justBelow) {
+        e.preventDefault();
+        // 1.4× amplification keeps it feeling snappy even though we're slowing it down
+        const delta = e.deltaY * 1.4;
+        const target = Math.min(sectionScrollEnd, Math.max(sectionTop, scrollTop + delta));
+        window.scrollTo({ top: target, behavior: "instant" });
+      }
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0]?.clientY ?? 0;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const node = sectionRef.current;
+      if (!node) return;
+
+      const touchY = e.touches[0]?.clientY ?? 0;
+      const deltaY = (touchStartY - touchY) * 2;
+      touchStartY = touchY;
+
+      const sectionTop = node.offsetTop;
+      const sectionHeight = node.offsetHeight;
+      const vh = window.innerHeight;
+      const scrollTop = window.scrollY;
+      const sectionScrollEnd = sectionTop + sectionHeight - vh;
+      const insideSection = scrollTop >= sectionTop && scrollTop <= sectionScrollEnd;
+
+      if (insideSection) {
+        e.preventDefault();
+        const target = Math.min(sectionScrollEnd, Math.max(sectionTop, scrollTop + deltaY));
+        window.scrollTo({ top: target, behavior: "instant" });
+      }
+    };
+
+    tick();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
     };
-  }, [phoneThread]);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    // Arrive and the thread travels toward my hand; scroll back up and it
-    // retraces its way out. It animates on its own rather than sticking to
-    // the scrollbar, easing toward wherever it should be.
-    let frame = 0;
-    let current = 0;
-    let greeted = false;
-    const tick = () => {
-      const { top } = node.getBoundingClientRect();
-      const target = top < window.innerHeight * 0.45 ? 1 : 0;
-      const gap = target - current;
-      current = Math.abs(gap) < 0.002 ? target : current + gap * 0.045 + Math.sign(gap) * 0.004;
-      current = Math.min(1, Math.max(0, current));
-      if (pathRef.current) pathRef.current.style.strokeDashoffset = `${1 - current}`;
-      const next = { seen: current > 0.3, reached: current >= 0.98 };
-      if (next.reached && !greeted) {
-        greeted = true;
-        say("hi", "you made it all the way here? hi.");
-      }
-      setStage((s) => (s.seen === next.seen && s.reached === next.reached ? s : next));
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
   }, []);
 
-  // Fade and sharpen something in, merged with its own classes and style.
-  const arrive = (on: boolean, delay: string, className: string, style?: CSSProperties) => ({
-    className: cn(className, "transition-all duration-700", on ? "translate-y-0 opacity-100 blur-0" : "translate-y-3 opacity-0 blur-sm"),
-    style: { ...style, transitionDelay: on ? delay : "0s" },
-  });
-
   return (
-    <section id="hi" ref={ref} className="relative min-h-screen overflow-hidden border-t border-border px-5 pb-10 pt-28 sm:px-8 md:h-screen md:min-h-[720px] md:px-[4.5vw] md:pb-0 md:pt-[23vh]">
-      {phoneThread && (
-        <svg aria-hidden="true" className="pointer-events-none absolute left-0 top-0 md:hidden" width={phoneThread.w} height={phoneThread.h} viewBox={`0 0 ${phoneThread.w} ${phoneThread.h}`}>
-          <path ref={phonePathRef} d={phoneThread.d} pathLength="1" strokeDasharray="1" style={{ strokeDashoffset: 1 }} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-        </svg>
-      )}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden h-screen md:block">
-        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
-          <path ref={pathRef} pathLength="1" strokeDasharray="1" style={{ strokeDashoffset: 1 }} d={thread} fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-        </svg>
-        {/* little sparks where the thread meets the peace sign */}
-        <svg viewBox="0 0 40 40" className={cn("absolute h-14 w-14 transition-all duration-500", stage.reached ? "scale-100 opacity-100" : "scale-50 opacity-0")} style={{ left: `calc(${HAND_X}vw + 0.4rem)`, top: `calc(${HAND_Y}vh - 3.4rem)` }}>
-          <path d="M9 4 L11 15 M23 7 L18 17 M33 17 L23 21" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-        <MeCutout visible={stage.reached} />
-        <div {...arrive(stage.reached, ".3s", "absolute", { left: `${HAND_X + 9.5}vw`, top: "32vh" })}>
-          <Scribble className="w-36" rotate={-14}>same girl...<br />just more<br />ideas now.</Scribble>
-          <ScribbleArrow className="-left-2 top-24" d="M30 4 C32 20 22 32 6 36" head="M6 36 L16 29 M6 36 L15 42" />
-        </div>
-        <div {...arrive(stage.reached, ".6s", "absolute", { left: `${HAND_X + 9.5}vw`, top: "65vh" })}>
-          <Scribble className="w-36" rotate={-14}>still figuring<br />this out...<br />and probably<br />always will.</Scribble>
-          <ScribbleArrow className="-left-12 top-10" d="M40 18 C30 30 18 32 6 30" head="M6 30 L15 24 M6 30 L14 37" />
-        </div>
-      </div>
-
-      <div {...arrive(seen, "0s", "relative md:max-w-[58vw]")}>
-        <div className="relative w-fit">
-          <Scribble className="absolute -left-1 -top-14 hidden md:block" rotate={-12}>who made this?</Scribble>
-          <ScribbleArrow className="-left-8 -top-7 hidden md:block" d="M26 4 C12 10 6 22 10 36" head="M10 36 L4 27 M10 36 L16 29" />
-          <h2 className="font-serif text-[clamp(3.5rem,6.6vw,7.5rem)] leading-[0.9] tracking-[-0.01em]">
-            <span ref={hiRef}>oh, hi.</span>
-            <br />
-            i'm <em>sachin</em>.
-          </h2>
-        </div>
-        <p className="mt-4 text-[clamp(1.05rem,1.25vw,1.35rem)] leading-[1.2] text-muted-foreground">still curious.<br />still building.<br />still learning.</p>
-        <p className="mt-7 font-serif text-[clamp(1.75rem,2.75vw,3rem)] leading-[1.08]">let's build something<br />the world <em>hasn't seen yet</em>.</p>
-        <div className="relative mt-7 flex w-fit flex-col items-start gap-3">
-          <a href={`mailto:${EMAIL}`} className={cn(pill, "min-w-64 bg-foreground py-3 text-background hover:bg-foreground/85")} data-cursor="send the interesting idea.">{EMAIL} <ArrowUpRight className="h-4 w-4" /></a>
-          <div className="flex flex-wrap gap-3">
-            <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className={cn(pill, "border border-foreground/50 py-2.5 hover:bg-foreground/5 max-md:bg-background")} data-cursor="the professional version.">linkedin <ArrowUpRight className="h-4 w-4" /></a>
-            <a href={LINKS.github} target="_blank" rel="noreferrer" className={cn(pill, "border border-foreground/50 py-2.5 hover:bg-foreground/5 max-md:bg-background")} data-cursor="where the ideas come alive.">github <ArrowUpRight className="h-4 w-4" /></a>
-            <a href={LINKS.x} target="_blank" rel="noreferrer" className={cn(pill, "border border-foreground/50 py-2.5 hover:bg-foreground/5 max-md:bg-background")} data-cursor="thoughts and musings.">x <ArrowUpRight className="h-4 w-4" /></a>
-            <a href={LINKS.leetcode} target="_blank" rel="noreferrer" className={cn(pill, "border border-foreground/50 py-2.5 hover:bg-foreground/5 max-md:bg-background")} data-cursor="problem solving journey.">leetcode <ArrowUpRight className="h-4 w-4" /></a>
+    <section
+      id="hi"
+      ref={sectionRef}
+      className="relative h-[250vh] border-t border-border/80 bg-background"
+    >
+      {/* Sticky Pinned Viewport — stays pinned in place through the entire scroll */}
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center px-5 py-6 sm:px-8 md:px-[4.5vw] overflow-hidden">
+        {/* Background Photo Stage — Clean transparent portrait without drop-shadows or dark halo */}
+        <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center select-none overflow-hidden">
+          {/* Sachin's Portrait Layer */}
+          <div
+            ref={photoRef}
+            className="relative max-h-[76vh] h-[72vh] w-auto will-change-transform flex items-center justify-center"
+            style={{
+              opacity: 1,
+              transform: "translate3d(0, 0, 0) scale(1)",
+              filter: "none",
+            }}
+          >
+            <img
+              src={sachinPortrait}
+              alt="Sachin Yadav portrait"
+              className="h-full w-auto max-h-[76vh] object-contain select-none pointer-events-none"
+              draggable={false}
+            />
           </div>
-          {/* the astronaut sits just past the buttons, its fun fact scribbled beside it */}
-          <div className="absolute bottom-[-1.75rem] left-[calc(100%+5vw)] hidden items-end gap-1 md:flex">
-            <div className="relative mb-24">
-              <Scribble className="w-36" rotate={-10}>fun fact:<br />i love solving<br />complex problems.</Scribble>
-              <ScribbleArrow className="-right-8 top-[4.5rem]" d="M4 8 C8 22 18 30 34 30" head="M34 30 L25 24 M34 30 L26 37" />
+        </div>
+
+        {/* Foreground OG Text Section — Open canvas typography */}
+        <div
+          ref={textRef}
+          className="relative z-10 w-full md:max-w-[56vw] will-change-transform"
+          style={{ opacity: 0, transform: "translate3d(0, 26px, 0)", pointerEvents: "none" }}
+        >
+          <div className="relative w-fit">
+            <Scribble className="absolute -left-1 -top-12 hidden md:block" rotate={-10}>
+              let&apos;s build together ✦
+            </Scribble>
+            <ScribbleArrow
+              className="-left-8 -top-6 hidden md:block"
+              d="M26 4 C12 10 6 22 10 36"
+              head="M10 36 L4 27 M10 36 L16 29"
+            />
+            <h2 className="font-serif text-[clamp(2.2rem,4.2vw,4.4rem)] leading-[0.98] tracking-[-0.01em] text-foreground">
+              <span>where logic meets imagination.</span>
+              <br />
+              i&apos;m <em>sachin yadav</em>.
+            </h2>
+          </div>
+
+          <p className="mt-3 text-[clamp(0.95rem,1.15vw,1.15rem)] leading-[1.35] text-muted-foreground font-mono">
+            software engineer &amp; problem solver.<br />
+            building scalable systems &amp; intelligent web applications.<br />
+            always curious. always shipping.
+          </p>
+
+          <p className="mt-4 font-serif text-[clamp(1.4rem,2.1vw,2.2rem)] leading-[1.15] text-foreground">
+            got an ambitious idea or project?<br />
+            let&apos;s build something <em>extraordinary</em>.
+          </p>
+
+          {/* Action buttons */}
+          <div className="relative mt-5 flex w-fit flex-col items-start gap-3">
+            {/* Primary Email CTA + Quick Copy */}
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+              <a
+                href={`mailto:${EMAIL}`}
+                className="group inline-flex items-center gap-2.5 rounded-full bg-foreground px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-medium text-background shadow-md transition-all duration-300 hover:bg-foreground/90 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+                data-cursor="drop me an email anytime"
+              >
+                <Mail className="h-3.5 w-3.5 opacity-80 transition-transform group-hover:scale-110" />
+                <span>{EMAIL}</span>
+                <ArrowUpRight className="h-3.5 w-3.5 opacity-70 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
+              </a>
+
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/80 px-3.5 py-2 sm:py-2.5 text-xs font-mono text-muted-foreground backdrop-blur-md transition-all duration-200 hover:border-foreground/40 hover:text-foreground hover:bg-foreground/5 active:scale-95"
+                title="Copy email address"
+                data-cursor="copy email to clipboard"
+              >
+                {copied ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-emerald-500" />
+                    <span className="font-medium text-emerald-500">copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3.5 w-3.5 opacity-70" />
+                    <span>copy</span>
+                  </>
+                )}
+              </button>
             </div>
-            <Figure src={astronaut} alt="a small astronaut holding a star" label="still aiming for the stars. just with code." size="sm" />
-          </div>
-        </div>
-        <div className="relative ml-auto mt-16 w-[58%] md:hidden">
-          <MeCutout phone visible={phoneReached} imgRef={phoneImgRef} />
-          {/* the astronaut, standing by my legs, with its fun fact above it */}
-          <div className="absolute bottom-[1%] right-[66%] flex w-40 flex-col items-center">
-            <Scribble className="mb-1 w-36 text-center" rotate={-8}>fun fact:<br />i love solving<br />complex problems.</Scribble>
-            <Figure src={astronaut} alt="a small astronaut holding a star" label="reaching for the stars through code." size="sm" />
-          </div>
-        </div>
-      </div>
 
-      <button onClick={() => document.getElementById("brain")?.scrollIntoView({ behavior: "smooth" })} className="story-link mt-10 block bg-transparent text-xs text-muted-foreground/70 md:absolute md:bottom-5 md:right-8 md:mt-0" data-cursor="rewind ↑">© 2026 sachin · back to top ↑</button>
+            {/* Social Pills */}
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={LINKS.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3.5 py-1.5 sm:py-2 text-xs font-medium text-foreground backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-foreground/50 hover:bg-foreground/[0.06] hover:shadow-md active:translate-y-0"
+                data-cursor="connect with me on linkedin"
+              >
+                <svg className="h-3.5 w-3.5 fill-current text-foreground/80 transition-colors group-hover:text-foreground" viewBox="0 0 24 24">
+                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28z" />
+                </svg>
+                <span>LinkedIn</span>
+                <ArrowUpRight className="h-3 w-3 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground" />
+              </a>
+
+              <a
+                href={LINKS.github}
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3.5 py-1.5 sm:py-2 text-xs font-medium text-foreground backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-foreground/50 hover:bg-foreground/[0.06] hover:shadow-md active:translate-y-0"
+                data-cursor="explore repositories & code"
+              >
+                <svg className="h-3.5 w-3.5 fill-current text-foreground/80 transition-colors group-hover:text-foreground" viewBox="0 0 24 24">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                </svg>
+                <span>GitHub</span>
+                <ArrowUpRight className="h-3 w-3 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground" />
+              </a>
+
+              <a
+                href={LINKS.x}
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3.5 py-1.5 sm:py-2 text-xs font-medium text-foreground backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-foreground/50 hover:bg-foreground/[0.06] hover:shadow-md active:translate-y-0"
+                data-cursor="thoughts on tech & ideas"
+              >
+                <svg className="h-3 w-3 fill-current text-foreground/80 transition-colors group-hover:text-foreground" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                <span>X</span>
+                <ArrowUpRight className="h-3 w-3 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground" />
+              </a>
+
+              <a
+                href={LINKS.leetcode}
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3.5 py-1.5 sm:py-2 text-xs font-medium text-foreground backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-foreground/50 hover:bg-foreground/[0.06] hover:shadow-md active:translate-y-0"
+                data-cursor="problem solving & algorithms"
+              >
+                <svg className="h-3 w-3 fill-current text-foreground/80 transition-colors group-hover:text-foreground" viewBox="0 0 24 24">
+                  <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .666-1.794l3.874-4.147 4.887-5.234a1.377 1.377 0 0 0-.02-1.933A1.365 1.365 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z" />
+                </svg>
+                <span>LeetCode</span>
+                <ArrowUpRight className="h-3 w-3 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Back to top button */}
+        <button
+          ref={backToTopRef}
+          onClick={() => document.getElementById("brain")?.scrollIntoView({ behavior: "smooth" })}
+          className="group inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/85 px-4 py-2 text-xs font-mono text-muted-foreground backdrop-blur-md shadow-sm transition-all duration-200 hover:border-foreground/40 hover:text-foreground hover:shadow-md fixed bottom-6 right-6 sm:right-8 z-30 will-change-transform"
+          data-cursor="rewind ↑"
+          style={{ opacity: 0, pointerEvents: "none" }}
+        >
+          <span>© 2026 sachin</span>
+          <span className="opacity-40">·</span>
+          <span className="inline-flex items-center gap-1 group-hover:text-foreground">
+            back to top <ArrowUp className="h-3 w-3 transition-transform duration-200 group-hover:-translate-y-0.5" />
+          </span>
+        </button>
+      </div>
     </section>
   );
 }
@@ -1796,19 +1835,19 @@ function PhoneComment() {
       {comment?.variant === "signature" ? (
         <div
           className={cn(
-            "flex items-center gap-2.5 rounded-full border border-violet-500/40 bg-zinc-950/90 px-4 py-2 text-white shadow-[0_8px_30px_rgba(124,58,237,0.35)] backdrop-blur-md transition-[opacity,scale] duration-300",
+            "flex items-center gap-2.5 rounded-full border border-border/80 bg-zinc-950/95 px-4 py-2 text-white shadow-2xl backdrop-blur-md transition-[opacity,scale] duration-300",
             comment ? "scale-100 opacity-100" : "scale-75 opacity-0",
           )}
         >
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-violet-500" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-zinc-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-zinc-100" />
           </span>
           <span className="font-serif text-[15px] italic tracking-wide text-zinc-100">
             {typed || " "}
           </span>
           {comment.tag && (
-            <span className="rounded-full border border-violet-500/40 bg-violet-500/20 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-violet-200">
+            <span className="rounded-full border border-zinc-700/60 bg-zinc-850 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-zinc-300">
               {comment.tag}
             </span>
           )}
@@ -1948,19 +1987,19 @@ function CuriousCursor({ visible }: { visible: boolean }) {
         <div
           data-pill="true"
           className={cn(
-            "flex items-center gap-2.5 rounded-full border border-violet-500/40 bg-zinc-950/90 px-4 py-2 text-white shadow-[0_8px_30px_rgba(124,58,237,0.35)] backdrop-blur-md transition-[opacity,scale] duration-300",
+            "flex items-center gap-2.5 rounded-full border border-border/80 bg-zinc-950/95 px-4 py-2 text-white shadow-2xl backdrop-blur-md transition-[opacity,scale] duration-300",
             showing ? "scale-100 opacity-100" : "scale-75 opacity-0",
           )}
         >
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-violet-500" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-zinc-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-zinc-100" />
           </span>
           <span className="font-serif text-[15px] italic tracking-wide text-zinc-100">
             {typed || " "}
           </span>
           {comment.tag && (
-            <span className="rounded-full border border-violet-500/40 bg-violet-500/20 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-violet-200">
+            <span className="rounded-full border border-zinc-700/60 bg-zinc-850 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-zinc-300">
               {comment.tag}
             </span>
           )}
