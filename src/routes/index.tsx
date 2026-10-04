@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { ArrowDown, ArrowUp, ArrowUpRight, Check, Copy, Mail } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpRight, Check, Copy, Cpu, Database, Layers, Mail, Terminal } from "lucide-react";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
 
 
@@ -465,6 +465,7 @@ function Portfolio() {
       </section>
 
       <WorkSection />
+      <TechStackSection />
       <OhHi />
       <CuriousCursor visible={scrollReady} />
       <PhoneComment />
@@ -1444,6 +1445,196 @@ function WorkSection() {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Creative, Classy & Animated Tech Stack Showcase
+// ---------------------------------------------------------------------------
+const techCategories = [
+  {
+    number: "01",
+    tag: "INTELLIGENCE & MODELS",
+    title: "AI / ML & Computer Vision",
+    icon: Cpu,
+    summary: "Convolutional neural nets, spatial-temporal forecasting, and vision pipelines.",
+    skills: [
+      { name: "PyTorch", type: "Deep Learning" },
+      { name: "OpenCV", type: "Computer Vision" },
+      { name: "CNNs & ConvLSTM", type: "Spatial-Temporal" },
+      { name: "Time-Series", type: "ARIMA / SARIMAX" },
+      { name: "Scikit-Learn", type: "Statistical ML" },
+      { name: "Pandas & NumPy", type: "Tensor & Vector" },
+    ],
+  },
+  {
+    number: "02",
+    tag: "ALGORITHMIC FOUNDATIONS",
+    title: "Core Languages & Systems",
+    icon: Terminal,
+    summary: "High-performance object-oriented code, data structures, and typed paradigms.",
+    skills: [
+      { name: "Java", type: "OOP & Systems" },
+      { name: "Python", type: "AI & Scripting" },
+      { name: "C++", type: "Low-level Performance" },
+      { name: "TypeScript", type: "Type-Safe Strict" },
+      { name: "JavaScript", type: "ESNext / Async" },
+      { name: "SQL", type: "Relational Queries" },
+    ],
+  },
+  {
+    number: "03",
+    tag: "INTERFACES & PLATFORMS",
+    title: "Modern Full-Stack Engineering",
+    icon: Layers,
+    summary: "Responsive reactive client interfaces backed by scalable microservices.",
+    skills: [
+      { name: "React", type: "Client Framework" },
+      { name: "Next.js", type: "SSR & Full-Stack" },
+      { name: "Node.js & Express", type: "Server Runtimes" },
+      { name: "Tailwind CSS", type: "Design Systems" },
+      { name: "TanStack Router", type: "Type-Safe Routing" },
+      { name: "RESTful APIs", type: "Contract Endpoints" },
+    ],
+  },
+  {
+    number: "04",
+    tag: "INFRASTRUCTURE & DATA",
+    title: "DevOps & Cloud Environment",
+    icon: Database,
+    summary: "Containerization, persistent database engines, and continuous workflow tooling.",
+    skills: [
+      { name: "MongoDB", type: "NoSQL Document" },
+      { name: "PostgreSQL", type: "ACID Relational" },
+      { name: "Docker", type: "Containerization" },
+      { name: "Git & GitHub", type: "Version Control" },
+      { name: "Linux / Bash", type: "OS & Shell Scripting" },
+      { name: "Postman", type: "API Telemetry" },
+    ],
+  },
+];
+
+const marqueeRow1 = [
+  "PYTORCH", "REACT.JS", "JAVA", "OPENCV", "TYPESCRIPT", "DOCKER", "NODE.JS", "MONGODB", "C++", "TIME-SERIES", "NEXT.JS", "FASTAPI",
+];
+
+const marqueeRow2 = [
+  "COMPUTER VISION", "DEEP LEARNING", "REST APIS", "SYSTEM DESIGN", "TAILWIND CSS", "SCIKIT-LEARN", "POSTGRESQL", "LINUX", "CONVLSTM", "ALGORITHMS",
+];
+
+function TechStackSection() {
+  return (
+    <section id="stack" className="relative border-t border-border/80 bg-background px-5 py-24 sm:px-8 sm:py-32 lg:px-16 overflow-hidden">
+      {/* Subtle Background Blueprint Grid */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.035] dark:opacity-[0.055]"
+        style={{
+          backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto max-w-[1300px]">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-12 sm:pb-16 border-b border-border/60">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-foreground/40 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground" />
+              </span>
+              <span className="text-[11px] font-mono tracking-widest text-muted-foreground uppercase font-semibold">
+                Tech Stack &amp; Capabilities
+              </span>
+            </div>
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-foreground leading-[1.08]">
+              Tools of the Craft. <br />
+              <span className="italic font-normal text-muted-foreground">from raw logic to production.</span>
+            </h2>
+          </div>
+          <p className="max-w-md text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            A battle-tested technical matrix across deep learning computer vision, scalable backend services, and interactive web architecture.
+          </p>
+        </div>
+
+        {/* 4 Interactive Categorized Pods */}
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:gap-8">
+          {techCategories.map((cat) => {
+            const Icon = cat.icon;
+            return (
+              <div
+                key={cat.number}
+                className="group relative overflow-hidden rounded-2xl border border-border/80 bg-background/80 dark:bg-zinc-950/70 p-6 sm:p-7 shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-foreground/40 hover:shadow-xl"
+              >
+                {/* Header inside pod */}
+                <div className="flex items-center justify-between pb-4 mb-4 border-b border-border/50">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-border/80 bg-foreground/[0.04] text-foreground transition-colors group-hover:bg-foreground group-hover:text-background">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="block text-[10px] font-mono tracking-widest text-muted-foreground uppercase">
+                        {cat.number} // {cat.tag}
+                      </span>
+                      <h3 className="font-serif text-lg font-medium text-foreground tracking-tight">
+                        {cat.title}
+                      </h3>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-mono text-muted-foreground/60">0{cat.skills.length}</span>
+                </div>
+
+                <p className="text-xs text-muted-foreground leading-relaxed mb-5">
+                  {cat.summary}
+                </p>
+
+                {/* Badges Grid */}
+                <div className="flex flex-wrap gap-2">
+                  {cat.skills.map((skill) => (
+                    <div
+                      key={skill.name}
+                      className="group/badge inline-flex items-center gap-1.5 rounded-lg border border-border/70 bg-foreground/[0.02] px-2.5 py-1 text-xs font-mono text-foreground/80 transition-all duration-200 hover:border-foreground/50 hover:bg-foreground/[0.08] hover:text-foreground hover:scale-[1.03]"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-foreground/40 group-hover/badge:bg-foreground transition-colors" />
+                      <span className="font-medium">{skill.name}</span>
+                      <span className="text-[9px] text-muted-foreground/70 hidden sm:inline">({skill.type})</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Creative Dual-Direction Animated Marquee Strip */}
+        <div className="mt-14 relative overflow-hidden rounded-2xl border border-border/70 bg-foreground/[0.02] p-4 sm:p-5 backdrop-blur-sm">
+          {/* Edge Fade Gradients */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-background to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-background to-transparent z-10" />
+
+          {/* Streamer Row 1 (Drifts Left) */}
+          <div className="flex w-max animate-marquee-left gap-4 font-mono text-xs uppercase tracking-widest text-muted-foreground/90 select-none pb-2">
+            {[...marqueeRow1, ...marqueeRow1].map((item, i) => (
+              <span key={`r1-${item}-${i}`} className="inline-flex items-center gap-3">
+                <span className="font-semibold text-foreground/80 hover:text-foreground transition-colors">{item}</span>
+                <span className="text-muted-foreground/30">•</span>
+              </span>
+            ))}
+          </div>
+
+          {/* Streamer Row 2 (Drifts Right) */}
+          <div className="flex w-max animate-marquee-right gap-4 font-mono text-xs uppercase tracking-widest text-muted-foreground/75 select-none pt-2 border-t border-border/40">
+            {[...marqueeRow2, ...marqueeRow2].map((item, i) => (
+              <span key={`r2-${item}-${i}`} className="inline-flex items-center gap-3">
+                <span className="font-semibold text-foreground/70 hover:text-foreground transition-colors">{item}</span>
+                <span className="text-muted-foreground/30">•</span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
