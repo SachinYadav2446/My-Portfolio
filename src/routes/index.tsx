@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { ArrowDown, ArrowUp, ArrowUpRight, Check, Copy, Cpu, Database, Layers, Mail, Terminal } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronRight, Copy, Cpu, Database, FlaskConical, Keyboard, Layers, Mail, Sparkles, Terminal } from "lucide-react";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
 
 
@@ -466,6 +466,7 @@ function Portfolio() {
 
       <WorkSection />
       <TechStackSection />
+      <ResearchLogBookSection />
       <OhHi />
       <CuriousCursor visible={scrollReady} />
       <PhoneComment />
@@ -1634,6 +1635,560 @@ function TechStackSection() {
                 <span className="text-muted-foreground/30">•</span>
               </span>
             ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Interactive Research Journal & Weekly Learning Log ("The Research Book")
+// ---------------------------------------------------------------------------
+interface LogPage {
+  id: string;
+  chapter: string;
+  tabTitle: string;
+  title: string;
+  category: string;
+  dateStamp: string;
+  status: string;
+  icon: typeof FlaskConical;
+  leftPage: {
+    badge: string;
+    heading: string;
+    paragraphs: string[];
+    equation?: {
+      label: string;
+      code: string;
+      caption: string;
+    };
+    keyPoints: string[];
+  };
+  rightPage: {
+    notesHeading: string;
+    workingNotes: string[];
+    codeBlock?: {
+      filename: string;
+      lang: string;
+      code: string;
+    };
+    marginScribble: {
+      text: string;
+      rotate: number;
+    };
+    actionStatus: string;
+  };
+}
+
+const researchPages: LogPage[] = [
+  {
+    id: "convnext-convlstm",
+    chapter: "CHAPTER 01 // ARCHITECTURE",
+    tabTitle: "ConvNeXt & ConvLSTM",
+    title: "Spatial-Temporal Vision Pipelines",
+    category: "DEEP LEARNING & COMPUTER VISION",
+    dateStamp: "CURRENT SPRINT // ACTIVE RESEARCH",
+    status: "PROTOTYPING & BENCHMARKING",
+    icon: FlaskConical,
+    leftPage: {
+      badge: "HYBRID VISION ARCHITECTURE",
+      heading: "Fusing ConvNeXt Backbones with Recurrent ConvLSTM Cells",
+      paragraphs: [
+        "Standard Vision Transformers (ViTs) require massive compute and quadratic attention overhead on long spatial sequences. For temporal cyclone sequence prediction, I am evaluating modern ConvNeXt architectures (using 7×7 depthwise convolutions and inverted bottlenecks) as spatial feature extractors.",
+        "Feeding multi-scale ConvNeXt feature maps directly into ConvLSTM recurrent layers preserves spatial topology while learning temporal flow vectors across consecutive satellite frames.",
+      ],
+      equation: {
+        label: "ConvLSTM Hidden State Transition:",
+        code: "H[t] = tanh(C[t]) ⊙ σ(W_ho * H[t-1] + W_xo * X[t] + b_o)",
+        caption: "Preserves 2D matrix structure through convolution operators inside recurrent gating.",
+      },
+      keyPoints: [
+        "7×7 depthwise kernels capture broad wind band curvature without attention overhead.",
+        "Inverted bottleneck design keeps intermediate gradient flow stable over long sequence rollouts.",
+        "Benchmarking against pure 3D CNNs to evaluate memory efficiency during 48-hour prediction horizons.",
+      ],
+    },
+    rightPage: {
+      notesHeading: "Lab Notes & Weekly Progress",
+      workingNotes: [
+        "Testing optical flow guidance vs end-to-end recurrent hidden state memory on synthetic sequences.",
+        "Downsampling via 2×2 strided convolutions with LayerNorm prevents early spatial feature loss.",
+        "Observed faster loss convergence compared to ResNet-50 baseline on temporal radar imagery.",
+      ],
+      codeBlock: {
+        filename: "temporal_block.py",
+        lang: "python",
+        code: `# ConvNeXt Stage + ConvLSTM Temporal Cell
+class TemporalVisionHead(nn.Module):
+    def __init__(self, in_channels=128, hidden_dim=64):
+        super().__init__()
+        self.encoder = ConvNeXtBlock(dim=in_channels)
+        self.temporal_gate = ConvLSTM2D(
+            in_channels=in_channels, 
+            hidden_channels=hidden_dim, 
+            kernel_size=(3, 3)
+        )
+    def forward(self, x_seq): # (B, T, C, H, W)
+        feats = [self.encoder(x) for x in x_seq.unbind(1)]
+        h_t, c_t = self.temporal_gate(torch.stack(feats, dim=1))
+        return h_t # Spatio-temporal representation`,
+      },
+      marginScribble: {
+        text: "ConvNeXt large kernel inductive bias beats standard ViTs for dense temporal frames ✦",
+        rotate: -3,
+      },
+      actionStatus: "Currently evaluating gradient stability on multi-frame INSAT thermal tracks.",
+    },
+  },
+  {
+    id: "cyclone-dvorak",
+    chapter: "CHAPTER 02 // METEOROLOGY & AI",
+    tabTitle: "Cyclone & Dvorak Formulas",
+    title: "Empirical Calibration & Intensity Equations",
+    category: "PHYSICAL METEOROLOGICAL MODELING",
+    dateStamp: "ACTIVE INVESTIGATION",
+    status: "MATHEMATICAL CALIBRATION",
+    icon: Sparkles,
+    leftPage: {
+      badge: "DVORAK ENHANCEMENT CALIBRATION",
+      heading: "Automating EIR Satellite Intensity Derivations",
+      paragraphs: [
+        "The Dvorak technique relates enhanced infrared (EIR) satellite cloud patterns (Central Dense Overcast, eye temperature gradients, and curved banding) to the Tropical Cyclone T-Number and maximum sustained wind velocity.",
+        "Current work focuses on calculating temperature deltas between the warm cyclone eye center and the coldest surrounding cloud-top ring to calibrate numerical pressure-wind equations.",
+      ],
+      equation: {
+        label: "Atkinson & Holliday Pressure-Wind Relation:",
+        code: "V_max = 3.9 × (P_n - P_c)^0.644   [knots]",
+        caption: "Where P_n is peripheral ambient pressure (hPa) and P_c is central eye minimum pressure.",
+      },
+      keyPoints: [
+        "Calculating thermal brightness gradients: ΔT = T(cloud_top_min) - T(eye_max).",
+        "Curved band analysis: Measuring spiral wrap log-polar arcs to determine early CI (Current Intensity).",
+        "Automating cloud pattern segmentation to remove manual human observer bias in operational forecasts.",
+      ],
+    },
+    rightPage: {
+      notesHeading: "Current Experiments & Derivations",
+      workingNotes: [
+        "Constructing calibrated lookup tables cross-referenced with IMD (India Meteorological Department) historical storm logs.",
+        "Calibrating BD-curve temperature thresholds (-30°C to -80°C) on INSAT-3D TIR-1 bands.",
+        "Developing a differentiable log-polar transform to auto-measure spiral banding angles.",
+      ],
+      codeBlock: {
+        filename: "dvorak_calibration.py",
+        lang: "python",
+        code: `def calculate_current_intensity(eye_temp_k, cloud_top_k, p_ambient=1010.0):
+    # Thermal gradient between warm eye core & cold eyewall
+    delta_t = eye_temp_k - cloud_top_k
+    
+    # Raw T-Number estimation from EIR gradient
+    t_number = 1.5 + (0.052 * delta_t)
+    
+    # Empirical central pressure drop (hPa)
+    central_pressure = p_ambient - ((t_number / 0.85) ** 1.55)
+    
+    # Max sustained surface wind (knots)
+    v_max = 3.9 * ((p_ambient - central_pressure) ** 0.644)
+    return round(v_max, 1), round(central_pressure, 1)`,
+      },
+      marginScribble: {
+        text: "Calibrating intensity curves with INSAT-3D thermal band records for Bay of Bengal storms.",
+        rotate: 2,
+      },
+      actionStatus: "Testing automated eye-wall boundary detection against noisy low-light IR tracks.",
+    },
+  },
+  {
+    id: "dvorak-ergonomics",
+    chapter: "CHAPTER 03 // SYSTEMS & ERGONOMICS",
+    tabTitle: "Dvorak Layout & Flow",
+    title: "Rewiring Muscle Memory & Keystroke Mechanics",
+    category: "ERGONOMICS & DEVELOPER WORKFLOW",
+    dateStamp: "ONGOING DAILY ROUTINE",
+    status: "NEURAL REWIRING (DAILY DRILLS)",
+    icon: Keyboard,
+    leftPage: {
+      badge: "KEYBOARD PARADIGM SHIFT",
+      heading: "Transitioning to the Dvorak Simplified Layout",
+      paragraphs: [
+        "The standard QWERTY layout was engineered in 1873 to prevent mechanical typewriters from jamming, forcing fingers to make erratic leaps across rows. On QWERTY, only ~32% of typing occurs on the home row.",
+        "By contrast, the Dvorak Simplified Layout places all most frequent vowels (AOEUI) on the left home row and common consonants (DHTNS) on the right home row, concentrating over 70% of keystrokes directly under home row resting positions.",
+      ],
+      equation: {
+        label: "Home Row Keystroke Distribution Comparison:",
+        code: "Dvorak: ~70% on Home Row  |  QWERTY: ~32% on Home Row",
+        caption: "Reduces total daily finger travel distance by over 60%, drastically decreasing forearm fatigue.",
+      },
+      keyPoints: [
+        "Vowels clustered on left hand; consonants on right hand creates rhythmic alternating-hand keystroke flow.",
+        "Significant reduction in awkward lateral index and pinky finger extensions.",
+        "Preserving modal navigation speed by mapping home-row friendly vim keybindings.",
+      ],
+    },
+    rightPage: {
+      notesHeading: "Daily Habit & Speed Curve Log",
+      workingNotes: [
+        "Week 1: Initial disorientation — typing at 18 WPM while brain rewires spatial letter associations.",
+        "Week 2: Transitioned to 45 WPM. Hand fatigue reduced significantly during 6+ hour coding marathons.",
+        "Adapting custom keymap layers for code symbols ({ }, [ ], ->, =>, ;) on mechanical keyboard.",
+      ],
+      codeBlock: {
+        filename: "dvorak_home_row.txt",
+        lang: "text",
+        code: `[ DVORAK SIMPLIFIED HOME ROW MATRIX ]
+--------------------------------------------------
+Left Hand (Vowels)       | Right Hand (Consonants)
+--------------------------------------------------
+[ A ]  [ O ]  [ E ]  [ U ]  [ I ]  |  [ D ]  [ H ]  [ T ]  [ N ]  [ S ]
+  |      |      |      |      |        |      |      |      |      |
+Pinky  Ring   Mid   Index  Index   |  Index Index  Mid   Ring  Pinky
+--------------------------------------------------
+-> Hand Alternation Rate: 67% (Smooth typing rhythm)
+-> Total Daily Finger Travel: Reduced by ~62%`,
+      },
+      marginScribble: {
+        text: "Slow initial climb, but the finger strain reduction during deep coding is night & day.",
+        rotate: -2,
+      },
+      actionStatus: "Maintaining daily 20-minute touch typing drills to target 75+ WPM fluid speed.",
+    },
+  },
+  {
+    id: "reading-stack",
+    chapter: "CHAPTER 04 // ACTIVE LITERATURE",
+    tabTitle: "Reading Stack & Papers",
+    title: "Whitepapers, Systems & Deep Learning",
+    category: "LITERATURE REVIEW & ENGINEERING PRINCIPLES",
+    dateStamp: "CURRENTLY READING",
+    status: "IN-DEPTH STUDY",
+    icon: BookOpen,
+    leftPage: {
+      badge: "CURATED READING STACK",
+      heading: "Core Papers & Foundational System Architecture",
+      paragraphs: [
+        "True engineering mastery comes from studying foundational research papers and understanding the design tradeoffs made by world-class system architects.",
+        "Here is what is currently open on my desk and reading queue this week — spanning deep convolutional networks, spatial-temporal sequence models, distributed systems, and meteorology standards.",
+      ],
+      keyPoints: [
+        "A ConvNet for the 2020s (Liu, Mao, Wu et al. - Meta AI & UC Berkeley)",
+        "Convolutional LSTM Network: Machine Learning for Precipitation Nowcasting (Shi et al.)",
+        "Designing Data-Intensive Applications (Martin Kleppmann)",
+        "Dvorak Tropical Cyclone Intensity Estimation Guide (WMO / NOAA Technical Guidelines)",
+      ],
+    },
+    rightPage: {
+      notesHeading: "Key Insights & Architecture Takeaways",
+      workingNotes: [
+        "Kleppmann (DDIA): 'Reliability means tolerating faults, not preventing them.' Emphasizing idempotency in my backend APIs.",
+        "Liu et al. (ConvNeXt): Re-engineering 7×7 depthwise convolutions and inverted 1×1 expansions achieves ViT-level accuracy with traditional CNN efficiency.",
+        "Shi et al. (ConvLSTM): Standard fully-connected LSTMs lose spatial correlation; convolution operators inside state transitions are mandatory for vision.",
+      ],
+      codeBlock: {
+        filename: "reading_tracker.json",
+        lang: "json",
+        code: `{
+  "current_deep_dive": "Designing Data-Intensive Applications",
+  "topic": "Distributed Consensus & Partition Tolerance",
+  "paper_of_the_week": "A ConvNet for the 2020s (arXiv:2201.03545)",
+  "focus_areas": [
+    "Spatial-temporal forecasting",
+    "Asynchronous microservice boundaries",
+    "Physical inductive priors in AI"
+  ],
+  "philosophy": "Always understand the raw principles beneath the framework."
+}`,
+      },
+      marginScribble: {
+        text: "Models are only as good as the telemetry and feature pipeline feeding them. Build robust foundations first.",
+        rotate: 2,
+      },
+      actionStatus: "Extracting architectural patterns for distributed real-time prediction microservices.",
+    },
+  },
+];
+
+function ResearchLogBookSection() {
+  const [activePageIndex, setActivePageIndex] = useState(0);
+  const [isFlipping, setIsFlipping] = useState(false);
+  const activePage = researchPages[activePageIndex];
+
+  const handlePageChange = (newIndex: number) => {
+    if (newIndex < 0 || newIndex >= researchPages.length || newIndex === activePageIndex) return;
+    setIsFlipping(true);
+    setTimeout(() => {
+      setActivePageIndex(newIndex);
+      setIsFlipping(false);
+    }, 180);
+  };
+
+  return (
+    <section id="research-book" className="relative border-t border-border/80 bg-background px-4 py-20 sm:px-8 sm:py-28 lg:px-14 overflow-hidden">
+      {/* Background Accent Grids */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
+        style={{
+          backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto max-w-[1300px]">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10 sm:pb-14 border-b border-border/60">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-foreground/40 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground" />
+              </span>
+              <span className="text-[11px] font-mono tracking-widest text-muted-foreground uppercase font-semibold">
+                Field Notes &amp; Active Research
+              </span>
+            </div>
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-foreground leading-[1.08]">
+              The Research Log. <br />
+              <span className="italic font-normal text-muted-foreground">what I am reading, building &amp; exploring this week.</span>
+            </h2>
+          </div>
+          <div className="max-w-xs text-xs font-mono text-muted-foreground leading-relaxed">
+            <span className="text-foreground font-medium block mb-1">// LIVE NOTEBOOK</span>
+            An authentic lab log of current deep learning experiments, cyclone intensity math, ergonomic habits, and active literature.
+          </div>
+        </div>
+
+        {/* Interactive Bookmark Tabs Header */}
+        <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-2 sm:gap-2.5 pb-2">
+          {researchPages.map((page, idx) => {
+            const Icon = page.icon;
+            const isActive = idx === activePageIndex;
+            return (
+              <button
+                key={page.id}
+                type="button"
+                onClick={() => handlePageChange(idx)}
+                className={cn(
+                  "group relative inline-flex items-center gap-2 rounded-t-xl border px-3.5 py-2.5 text-xs font-mono transition-all duration-200 active:scale-95",
+                  isActive
+                    ? "border-b-transparent border-foreground/30 bg-background text-foreground shadow-md font-semibold -mb-[1px] z-20"
+                    : "border-border/60 bg-foreground/[0.03] text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground hover:border-border"
+                )}
+                data-cursor={`open ${page.tabTitle}`}
+              >
+                {isActive && (
+                  <span className="absolute -top-1 left-3 right-3 h-[2px] bg-foreground rounded-full" />
+                )}
+                <Icon className={cn("h-3.5 w-3.5 transition-transform group-hover:scale-110", isActive ? "text-foreground" : "text-muted-foreground")} />
+                <span>0{idx + 1}. {page.tabTitle}</span>
+                {isActive && (
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* The Open Research Notebook (Two-Page Spread Design) */}
+        <div
+          className={cn(
+            "relative rounded-2xl rounded-tl-none border border-border/80 bg-background dark:bg-zinc-950/80 shadow-2xl backdrop-blur-md overflow-hidden transition-opacity duration-200",
+            isFlipping ? "opacity-40 scale-[0.995]" : "opacity-100 scale-100"
+          )}
+        >
+          {/* Top Leather Binding & Book Stitch Line */}
+          <div className="relative flex items-center justify-between border-b border-border/60 bg-foreground/[0.02] px-5 py-3 sm:px-8">
+            <div className="flex items-center gap-3">
+              <span className="h-2 w-2 rounded-full bg-foreground/30" />
+              <span className="text-[10px] sm:text-[11px] font-mono tracking-widest text-muted-foreground uppercase">
+                {activePage.chapter}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:inline-block px-2.5 py-0.5 text-[9px] font-mono rounded-full border border-border bg-foreground/[0.03] text-foreground/80 uppercase tracking-wider font-medium">
+                {activePage.status}
+              </span>
+              <span className="text-[10px] font-mono text-muted-foreground/70">{activePage.dateStamp}</span>
+            </div>
+          </div>
+
+          {/* Book Interior (Two Columns on Large Screens) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-border/60">
+            {/* LEFT PAGE: Theoretical Principles, Architecture & Equations */}
+            <div className="p-6 sm:p-8 lg:p-10 lg:col-span-6 flex flex-col justify-between relative bg-background/50">
+              {/* Subtle Grid Watermark on Left Page */}
+              <div
+                className="pointer-events-none absolute inset-0 opacity-[0.025] dark:opacity-[0.04]"
+                style={{
+                  backgroundImage: "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+                  backgroundSize: "20px 20px",
+                }}
+              />
+
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-foreground/[0.04] border border-border/80 text-[10px] font-mono uppercase tracking-wider text-muted-foreground mb-4">
+                  <Bookmark className="h-3 w-3 text-foreground/70" />
+                  <span>{activePage.leftPage.badge}</span>
+                </div>
+
+                <h3 className="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-foreground leading-snug">
+                  {activePage.leftPage.heading}
+                </h3>
+
+                <div className="mt-4 space-y-3 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  {activePage.leftPage.paragraphs.map((p, pIdx) => (
+                    <p key={pIdx}>{p}</p>
+                  ))}
+                </div>
+
+                {/* Mathematical Equation Block if present */}
+                {activePage.leftPage.equation && (
+                  <div className="mt-6 rounded-xl border border-border/80 bg-foreground/[0.02] p-4 font-mono">
+                    <span className="text-[10px] text-muted-foreground block mb-1 uppercase tracking-wider font-semibold">
+                      {activePage.leftPage.equation.label}
+                    </span>
+                    <div className="py-2 text-xs sm:text-sm text-foreground font-semibold tracking-wide overflow-x-auto">
+                      {activePage.leftPage.equation.code}
+                    </div>
+                    <p className="mt-1 text-[10px] text-muted-foreground/80 leading-relaxed italic">
+                      {activePage.leftPage.equation.caption}
+                    </p>
+                  </div>
+                )}
+
+                {/* Bullet Points */}
+                <div className="mt-6 space-y-2">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-semibold block mb-2">
+                    // Key Technical Invariants
+                  </span>
+                  {activePage.leftPage.keyPoints.map((point, kIdx) => (
+                    <div key={kIdx} className="flex items-start gap-2.5 text-xs text-foreground/90 leading-relaxed">
+                      <span className="h-1.5 w-1.5 rounded-full bg-foreground/60 mt-1.5 shrink-0" />
+                      <span>{point}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Left Page Footer */}
+              <div className="relative z-10 mt-8 pt-4 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-muted-foreground/60">
+                <span>SACHIN YADAV // RESEARCH DISPATCH</span>
+                <span>PAGE 0{activePageIndex * 2 + 1}</span>
+              </div>
+            </div>
+
+            {/* RIGHT PAGE: Lab Notes, Implementation Snippet & Handwritten Reflection */}
+            <div className="p-6 sm:p-8 lg:p-10 lg:col-span-6 flex flex-col justify-between relative bg-background/80">
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-serif text-xl font-medium tracking-tight text-foreground">
+                    {activePage.rightPage.notesHeading}
+                  </h4>
+                  <span className="text-[10px] font-mono text-muted-foreground/70">WEEKLY LOG</span>
+                </div>
+
+                {/* Working Observations */}
+                <ul className="space-y-2.5">
+                  {activePage.rightPage.workingNotes.map((note, nIdx) => (
+                    <li key={nIdx} className="flex items-start gap-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                      <span className="text-foreground/50 font-mono text-xs mt-0.5">▸</span>
+                      <span>{note}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Code Snippet / Terminal Box */}
+                {activePage.rightPage.codeBlock && (
+                  <div className="mt-6 rounded-xl border border-border/80 bg-zinc-950 text-zinc-200 overflow-hidden shadow-md">
+                    <div className="flex items-center justify-between border-b border-zinc-800 bg-zinc-900/90 px-3.5 py-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="h-2 w-2 rounded-full bg-zinc-700" />
+                        <span className="h-2 w-2 rounded-full bg-zinc-700" />
+                        <span className="h-2 w-2 rounded-full bg-zinc-700" />
+                        <span className="ml-2 text-[10px] font-mono text-zinc-400">
+                          {activePage.rightPage.codeBlock.filename}
+                        </span>
+                      </div>
+                      <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500">
+                        {activePage.rightPage.codeBlock.lang}
+                      </span>
+                    </div>
+                    <pre className="p-3.5 text-[11px] sm:text-[11.5px] font-mono leading-relaxed overflow-x-auto text-zinc-300">
+                      <code>{activePage.rightPage.codeBlock.code}</code>
+                    </pre>
+                  </div>
+                )}
+
+                {/* Handwritten Margin Note in Notebook */}
+                <div className="mt-6 p-3.5 rounded-xl border border-dashed border-border/80 bg-foreground/[0.02]">
+                  <Scribble rotate={activePage.rightPage.marginScribble.rotate} className="text-foreground/90 font-medium">
+                    ✦ {activePage.rightPage.marginScribble.text}
+                  </Scribble>
+                </div>
+              </div>
+
+              {/* Right Page Footer */}
+              <div className="relative z-10 mt-8 pt-4 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-muted-foreground/60">
+                <span>{activePage.rightPage.actionStatus}</span>
+                <span>PAGE 0{activePageIndex * 2 + 2}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Book Bottom Navigation Bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between border-t border-border/60 bg-foreground/[0.03] px-5 py-3.5 sm:px-8 gap-3">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handlePageChange(activePageIndex - 1)}
+                disabled={activePageIndex === 0}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-mono transition-all duration-150 active:scale-95",
+                  activePageIndex === 0
+                    ? "border-border/40 text-muted-foreground/40 cursor-not-allowed bg-transparent"
+                    : "border-border/80 bg-background text-foreground hover:bg-foreground/[0.06] hover:border-foreground/40 shadow-sm"
+                )}
+                data-cursor="previous page"
+              >
+                <ChevronLeft className="h-3.5 w-3.5" />
+                <span>Previous Entry</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handlePageChange(activePageIndex + 1)}
+                disabled={activePageIndex === researchPages.length - 1}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-mono transition-all duration-150 active:scale-95",
+                  activePageIndex === researchPages.length - 1
+                    ? "border-border/40 text-muted-foreground/40 cursor-not-allowed bg-transparent"
+                    : "border-border/80 bg-background text-foreground hover:bg-foreground/[0.06] hover:border-foreground/40 shadow-sm"
+                )}
+                data-cursor="next page"
+              >
+                <span>Next Entry</span>
+                <ChevronRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            {/* Page Indicator */}
+            <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+              <span>Entry 0{activePageIndex + 1} of 0{researchPages.length}</span>
+              <div className="flex items-center gap-1">
+                {researchPages.map((_, dotIdx) => (
+                  <button
+                    key={dotIdx}
+                    type="button"
+                    onClick={() => handlePageChange(dotIdx)}
+                    className={cn(
+                      "h-1.5 rounded-full transition-all duration-200",
+                      dotIdx === activePageIndex ? "w-5 bg-foreground" : "w-1.5 bg-muted-foreground/40 hover:bg-foreground/60"
+                    )}
+                    aria-label={`Go to page ${dotIdx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
