@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { ArrowDown, ArrowUp, ArrowUpRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronRight, Copy, Cpu, Database, FlaskConical, Keyboard, Layers, Mail, Sparkles, Terminal } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpRight, Atom, BookOpen, Bookmark, Check, ChevronLeft, ChevronRight, Compass, Copy, Cpu, Database, Feather, FlaskConical, Keyboard, Layers, Mail, Orbit, ShieldCheck, Sparkles, Terminal } from "lucide-react";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
 
 
@@ -176,10 +176,6 @@ const THREAD = threadPath(THREAD_WAYPOINTS);
 // Sampled once, the first time anything needs points along the thread.
 let threadSamples: ThreadSamples | null = null;
 const getThreadSamples = () => (threadSamples ??= sampleSegments(threadSegments(THREAD_WAYPOINTS)));
-
-// A deliberately messy scribble ball — "an almost accurate map of everything on
-// my mind." It draws itself once on load before the rest of the page appears.
-const TANGLE = "M412 441 C515 397 634 254 612 324 C514 323 496 516 405 384 C462 554 503 411 563 536 C550 451 352 221 429 252 C463 251 542 590 592 462 C722 444 518 320 633 498 C733 324 559 351 502 325 C451 436 535 231 665 369 C653 189 542 154 453 252 C356 135 579 427 545 447 C580 505 551 553 468 379 C518 265 542 377 549 499 C417 489 679 300 622 421 C560 362 446 473 393 465 C424 562 372 482 401 372 C511 215 515 477 398 393 C299 375 474 580 439 424 C406 450 754 502 668 389 C754 375 628 135 588 240 C647 360 527 578 489 496 C412 647 637 651 506 469 C517 579 481 408 530 253 C626 196 462 257 574 279 C588 381 649 162 652 341 C736 176 676 270 595 393 C551 502 511 179 608 312 C612 397 708 447 616 375 C736 373 748 312 627 469 C552 479 478 362 535 275 C572 284 689 483 596 461 C546 415 740 502 646 350 C568 483 705 479 578 470 C598 357 572 439 563 438 C591 259 667 301 541 295 C514 408 442 336 425 339 C477 175 577 532 566 565 C690 668 539 510 601 520 C501 495 679 640 594 488 C588 419 456 553 539 509 C654 369 727 177 651 357 C569 254 524 516 473 584 C434 629 437 615 543 528 C442 532 526 141 593 255 C601 231 606 485 639 519 C647 390 459 557 538 507 C576 518 628 307 533 264 C629 164 569 587 504 469 C613 399 567 642 617 482 C541 668 630 423 525 561 C455 646 384 347 449 499 C539 470 700 212 622 354 C596 424 286 189 397 302 C446 458 674 337 547 482 C549 579 634 356 633 287 C549 135 414 322 520 498 C534 503 529 135 511 184 C425 135 660 668 568 590 C683 437 488 449 606 279 C596 379 420 421 467 434 C471 407 689 259 661 443 C716 574 443 556 529 573 C594 538 432 461 514 588 C517 405 556 436 450 322 C505 459 612 520 577 556 C604 558 721 555 590 440 C525 596 458 425 392 320 C477 284 564 456 457 313 C510 414 656 303 584 339 C645 177 559 393 602 405 C470 350 507 466 470 418 C398 587 607 453 562 514 C605 541 471 310 462 352 C597 406 484 646 429 547 C559 367 672 461 640 371 C574 334 357 135 479 238 C445 135 484 601 551 447 C565 450 754 442 661 416 C754 468 560 135 476 191 C502 289 516 578 638 416 C547 405 304 412 394 413 C423 246 578 558 458 588 C465 625 583 385 619 466 C661 489 450 271 508 189 C453 135 441 135 510 212 C417 308 529 344 558 194 C625 135 578 668 446 536 C331 668 614 267 632 276 C754 178 412 653 405 488 C465 476 724 388 594 268 C622 135 486 278 453 295 C373 135 426 166 418 308 C403 372 613 387 625 476 C647 446 734 396 660 384 C754 555 570 156 507 255 C403 404 586 275 509 227 C471 141 443 489 393 465 C418 515 700 369 632 486 C564 668 746 567 634 424 C510 258 381 378 443 406 C476 256 497 135 486 246 C374 313 426 307 413 257 C379 248 440 397 518 456 C584 584 366 418 481 562 C565 608 613 381 540 489 C520 398 704 245 621 295 C662 479 342 484 389 465 C455 624 444 499 463 549 C354 668 438 372 552 530 C569 524 619 135 569 199";
 
 type Subscribe = (listen: (progress: number) => void) => () => void;
 
@@ -1036,41 +1032,44 @@ const CLIMB_Y1 = 720;
 
 function MobileStory({ ready, onWork }: { ready: boolean; onWork: () => void }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const tangleRef = useRef<SVGSVGElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const tipRef = useRef<SVGCircleElement>(null);
   const samplesRef = useRef<ThreadSamples | null>(null);
   const [geo, setGeo] = useState<{ d: string; w: number; h: number } | null>(null);
 
-  // Trace the thread through every anchor, starting at the tangle's loose end.
+  // Trace the thread through every anchor down the mobile page.
   useEffect(() => {
     const measure = () => {
       const root = rootRef.current;
-      const svg = tangleRef.current;
-      if (!root || !svg || root.offsetParent === null) return;
+      const hero = heroRef.current;
+      if (!root || !hero || root.offsetParent === null) return;
       const r = root.getBoundingClientRect();
-      const t = svg.getBoundingClientRect();
-      // The tangle's viewBox is 550×600 from (250,100), scaled to fit and
-      // centred; its loose end is at (569,199).
-      const k = Math.min(t.width / 550, t.height / 600);
-      const points: Waypoint[] = [[t.left - r.left + (t.width - 550 * k) / 2 + 319 * k, t.top - r.top + (t.height - 600 * k) / 2 + 99 * k]];
+      const h = hero.getBoundingClientRect();
+      
+      // Start thread right below the centered signature in hero
+      const startX = r.width * 0.5;
+      const startY = h.bottom - r.top - 40;
+      const points: Waypoint[] = [[startX, startY]];
+
       root.querySelectorAll<HTMLElement>("[data-anchor]").forEach((el) => {
         const a = el.getBoundingClientRect();
         const loop = Number(el.dataset["anchor"]);
         points.push(loop ? [a.left - r.left, a.top - r.top, loop] : [a.left - r.left, a.top - r.top]);
       });
+
       const segments = threadSegments(points, 1, 1);
       samplesRef.current = sampleSegments(segments, 24);
       setGeo({ d: segmentsPath(segments), w: r.width, h: r.height });
     };
+
     measure();
     void document.fonts?.ready.then(measure);
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
   }, []);
 
-  // Draw the thread down to ~70% of the screen as you scroll, like a pen
-  // following your thumb; scrolling back up rewinds it.
+  // Draw the thread as user scrolls
   useEffect(() => {
     if (!geo) return;
     let frame = 0;
@@ -1082,10 +1081,9 @@ function MobileStory({ ready, onWork }: { ready: boolean; onWork: () => void }) 
       const samples = samplesRef.current;
       if (!root || !path || !tip || !samples) return;
       const { xs, ys, lengths, total } = samples;
-      // Nothing leaves the tangle until you scroll; then the thread grows with
-      // the scroll until it catches up with ~70% down the screen.
+      
       const top = root.getBoundingClientRect().top;
-      const reach = Math.min(window.innerHeight * 0.7 - top, (ys[0] ?? 0) + Math.max(0, -top) * 1.4);
+      const reach = Math.min(window.innerHeight * 0.75 - top, (ys[0] ?? 0) + Math.max(0, -top) * 1.35);
       let i = 0;
       while (i < xs.length - 1 && (ys[i] ?? 0) < reach) i += 1;
       const length = lengths[i] ?? 0;
@@ -1105,7 +1103,7 @@ function MobileStory({ ready, onWork }: { ready: boolean; onWork: () => void }) 
     };
   }, [geo]);
 
-  // Things sharpen in as they scroll into view.
+  // Reveal elements on scroll
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
@@ -1118,7 +1116,7 @@ function MobileStory({ ready, onWork }: { ready: boolean; onWork: () => void }) 
       { rootMargin: "0px 0px -8% 0px", threshold: 0.15 },
     );
     root.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-    // Story comments, said once each as their moment scrolls up the screen.
+    
     const talk = new IntersectionObserver(
       (entries) => entries.forEach((e) => {
         const line = (e.target as HTMLElement).dataset["say"];
@@ -1139,72 +1137,113 @@ function MobileStory({ ready, onWork }: { ready: boolean; onWork: () => void }) 
     <div ref={rootRef} className="relative overflow-hidden md:hidden">
       {geo && (
         <svg aria-hidden="true" className={cn("pointer-events-none absolute left-0 top-0 transition-opacity duration-700", ready ? "opacity-100" : "opacity-0")} width={geo.w} height={geo.h} viewBox={`0 0 ${geo.w} ${geo.h}`}>
-          <path ref={pathRef} d={geo.d} pathLength="1" strokeDasharray="1" style={{ strokeDashoffset: 1 }} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-          <circle ref={tipRef} r="4.5" cx="0" cy="0" style={{ opacity: 0 }} className="fill-foreground" />
+          <path ref={pathRef} d={geo.d} pathLength="1" strokeDasharray="1" style={{ strokeDashoffset: 1 }} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+          <circle ref={tipRef} r="5" cx="0" cy="0" style={{ opacity: 0 }} className="fill-foreground shadow-sm" />
         </svg>
       )}
 
-      {/* the anatomy of a curious developer */}
-      <div className="relative h-[132svh]">
-        <svg ref={tangleRef} aria-hidden="true" viewBox="250 100 550 600" className="absolute inset-x-0 top-[27svh] h-[50svh] w-full overflow-visible">
-          <path className="animate-draw-string" style={{ animationDuration: "2.6s" }} pathLength="1" strokeDasharray="1" d={TANGLE} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-        </svg>
-        <div className={cn("absolute right-5 top-[17svh] flex w-44 items-start gap-1.5 text-[0.8rem] leading-snug text-muted-foreground", ready ? "opacity-100" : "animate-reveal [animation-delay:2.2s]")}>
-          <svg aria-hidden="true" viewBox="0 0 40 30" className="mt-4 h-5 w-7 shrink-0"><path d="M38 4 C24 6 12 14 4 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /><path d="M4 24 L13 22 M4 24 L7 15" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
-          <span>an almost accurate map of everything on my mind.</span>
+      {/* Modern Clean Hero for Mobile */}
+      <div ref={heroRef} className="relative min-h-[92svh] flex flex-col justify-between items-center px-5 pt-24 pb-12 text-center select-none overflow-hidden">
+        {/* Ambient background grid pattern */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.035] dark:opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, currentColor 1px, transparent 1px), linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+            backgroundSize: "40px 40px, 80px 80px, 80px 80px",
+          }}
+        />
+
+        {/* Top Header Badge */}
+        <div className={cn("relative z-10 transition-all duration-700", ready ? "opacity-100 scale-100" : "opacity-0 scale-95 animate-reveal [animation-delay:1.2s]")}>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-foreground/15 bg-foreground/[0.04] text-[10px] font-mono tracking-widest text-muted-foreground uppercase shadow-xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>BINARY SPHERE // ARCHITECTURE</span>
+          </div>
         </div>
-        <p className={cn("absolute left-5 top-[90svh] text-[2.6rem] font-semibold leading-[0.95]", ready ? "opacity-100" : "animate-reveal [animation-delay:2.2s]")}>the<br />anatomy of a<br /><span className="font-serif italic">curious developer.</span></p>
-        <Anchor x="86%" y="66svh" />
-        <Anchor x="93%" y="122svh" />
+
+        {/* Center Signature & Name */}
+        <div className={cn("relative z-10 my-auto py-6 flex flex-col items-center justify-center transition-all duration-700", ready ? "opacity-100 scale-100" : "opacity-0 scale-95 animate-reveal [animation-delay:1.8s]")}>
+          <div className="relative group p-2">
+            <img
+              src={signature}
+              alt="Sachin Yadav Signature"
+              className="w-[280px] xs:w-[320px] max-w-[85vw] h-auto object-contain select-none pointer-events-none drop-shadow-md dark:invert"
+              draggable={false}
+            />
+          </div>
+
+          <p className="mt-4 font-serif text-2xl font-medium tracking-tight text-foreground">
+            Sachin Yadav
+          </p>
+          <p className="mt-1 text-xs font-mono text-muted-foreground tracking-wide max-w-[280px]">
+            Engineering &amp; Innovation • Scalable Systems &amp; Applied AI
+          </p>
+        </div>
+
+        {/* Bottom Scroll Prompt */}
+        <div className={cn("relative z-10 flex flex-col items-center gap-1.5 text-muted-foreground/70 transition-all duration-700", ready ? "opacity-100" : "opacity-0 animate-reveal [animation-delay:2.4s]")}>
+          <span className="text-[10px] font-mono tracking-widest uppercase">Scroll to explore journey</span>
+          <ArrowDown className="h-3.5 w-3.5 animate-bounce" />
+        </div>
+
+        <Anchor x="50%" y="90svh" />
       </div>
 
-      {/* transition section */}
-      <div className="relative h-[180px]">
+      {/* Transition spacer & Realm entry marker */}
+      <div className="relative py-10 px-5 text-center">
         <span data-say="exploring new technologies." className="absolute left-0 top-0 h-px w-px" />
-        <Anchor x="25%" y={40} />
-        <Anchor x="75%" y={120} />
+        <div className="reveal inline-flex items-center gap-2 text-[10px] font-mono tracking-widest text-foreground/80 uppercase px-3 py-1 rounded-full border border-foreground/15 bg-foreground/[0.03]">
+          <span className="h-1.5 w-1.5 rounded-full bg-foreground animate-ping" />
+          <span>Engineering &amp; Innovation //</span>
+        </div>
+        <Anchor x="28%" y={40} />
+        <Anchor x="72%" y={100} />
       </div>
 
-      {/* my journey — the years hang off the thread */}
-      <div className="relative mt-12 px-5">
+      {/* The Journey Timeline on Mobile */}
+      <div className="relative mt-4 px-5 pb-16">
         <span data-say="my journey: continuous growth and building." className="absolute left-0 top-20 h-px w-px" />
-        <Anchor x="6%" y={-20} />
-        <div className="reveal mx-auto max-w-[20rem] text-center mb-6">
+        <Anchor x="8%" y={-20} />
+        
+        <div className="reveal mx-auto max-w-[20rem] text-center mb-8">
           <span className="px-2.5 py-0.5 text-[10px] font-mono font-medium rounded-full bg-foreground/[0.06] text-foreground border border-foreground/20 uppercase tracking-wider inline-block mb-1.5">Evolutionary Path</span>
-          <h2 className="font-serif text-3xl font-medium leading-tight">The Journey <span className="italic text-muted-foreground">of Growth</span></h2>
+          <h2 className="font-serif text-3xl font-medium leading-tight text-foreground">The Journey <span className="italic text-muted-foreground">of Growth</span></h2>
         </div>
-        <ol className="relative pl-4 space-y-4">
+
+        <ol className="relative pl-5 space-y-5">
           {timeline.map((stop, index) => (
             <li key={stop.year + stop.title} className="reveal relative pl-6 pb-2">
               <span data-anchor className="absolute left-0 top-3" />
-              <span className={cn("absolute left-0 top-2.5 h-2.5 w-2.5 rounded-full -translate-x-1/2 drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]", stop.dotClass)} />
-              <div className="rounded-xl border border-border/80 bg-background/90 p-3.5 shadow-md backdrop-blur-sm">
-                <div className="flex items-center justify-between mb-1.5">
+              <span className={cn("absolute left-0 top-3 h-3 w-3 rounded-full -translate-x-1/2 drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]", stop.dotClass)} />
+              <div className="rounded-2xl border border-border/80 bg-background/95 dark:bg-zinc-950/90 p-4 shadow-md backdrop-blur-md">
+                <div className="flex items-center justify-between mb-2">
                   <span className={cn("px-2 py-0.5 text-[9px] font-mono font-medium rounded-full border uppercase tracking-wider", stop.badgeClass)}>
                     {stop.year}
                   </span>
                   <span className="text-[10px] font-mono text-muted-foreground/60">0{index + 1} // {stop.phase}</span>
                 </div>
-                <h3 className="font-serif text-base font-medium">{stop.title}</h3>
-                <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{stop.line}</p>
+                <h3 className="font-serif text-base font-medium text-foreground">{stop.title}</h3>
+                <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">{stop.line}</p>
               </div>
             </li>
           ))}
         </ol>
-        <Anchor x="6%" y="100%" />
+        <Anchor x="8%" y="100%" />
       </div>
 
-
-      {/* the thread ends at the work transition */}
-      <div className="relative px-4 pb-20 pt-10 text-center flex flex-col items-center justify-center min-h-[90vh]">
+      {/* The thread ends at the Portrait & Explore Work */}
+      <div className="relative px-4 pb-20 pt-8 text-center flex flex-col items-center justify-center min-h-[90vh]">
         <span data-say="go on. explore the projects." className="absolute left-0 top-10 h-px w-px" />
-        <Anchor x="94%" y={40} />
-        {/* FULL-HEIGHT PORTRAIT ON MOBILE - NO TEXT OVERLAY */}
-        <div className="reveal relative mx-auto w-full h-[78vh] flex items-center justify-center overflow-hidden">
+        <Anchor x="92%" y={30} />
+        
+        {/* Full-Height Portrait on Mobile */}
+        <div className="reveal relative mx-auto w-full h-[75vh] flex items-center justify-center overflow-hidden">
           <img
             src={beyondCodePortrait}
             alt="Sachin Yadav portrait line art"
-            className="h-full w-auto max-h-[78vh] object-contain opacity-100 contrast-125 dark:invert dark:opacity-95"
+            className="h-full w-auto max-h-[75vh] object-contain opacity-100 contrast-125 dark:invert dark:opacity-95 select-none pointer-events-none"
+            draggable={false}
           />
         </div>
 
@@ -1683,6 +1722,53 @@ interface LogPage {
 
 const researchPages: LogPage[] = [
   {
+    id: "index-toc",
+    chapter: "VOLUME 01 // DISPATCH INDEX",
+    tabTitle: "Table of Contents",
+    title: "Table of Contents & Sprint Index",
+    category: "LAB INDEX & ACTIVE DIRECTORY",
+    dateStamp: "AUTUMN 2026",
+    status: "ACTIVE EXPERIMENTAL LOG",
+    icon: Bookmark,
+    leftPage: {
+      badge: "ARCHIVAL FIELD LOG",
+      heading: "Table of Contents",
+      paragraphs: [
+        "A live operational journal documenting spatial-temporal deep learning vision architectures, empirical cyclone intensity derivations, keyboard ergonomics, and foundational research papers.",
+      ],
+      keyPoints: [
+        "01. Spatial-Temporal Vision (ConvNeXt & ConvLSTM) — Page 03",
+        "02. Cyclone Dynamics & Dvorak EIR Calibration — Page 05",
+        "03. Dvorak Keymap Mechanics & Muscle Memory — Page 07",
+        "04. Foundational Papers & System Architecture — Page 09",
+      ],
+    },
+    rightPage: {
+      notesHeading: "Research Methodology & Principles",
+      workingNotes: [
+        "First-principles systems engineering: Grounding deep learning vision pipelines in empirical physical meteorology.",
+        "Rapid experimentation loop: Deriving theoretical equations -> Python verification -> real-time telemetry.",
+        "Continuous profiling: Benchmarking throughput, memory footprint, and keystroke ergonomics.",
+      ],
+      codeBlock: {
+        filename: "manifest.json",
+        lang: "json",
+        code: `{
+  "author": "Sachin Yadav",
+  "domains": ["AI/ML", "Vision", "Meteorology", "Ergonomics"],
+  "active_dispatches": 4,
+  "status": "Active Prototyping",
+  "motto": "Nullius in verba • Build from foundations"
+}`,
+      },
+      marginScribble: {
+        text: "True engineering lives at the intersection of deep theory and working implementations.",
+        rotate: -2,
+      },
+      actionStatus: "All 4 research dispatches verified & compiled.",
+    },
+  },
+  {
     id: "convnext-convlstm",
     chapter: "CHAPTER 01 // ARCHITECTURE",
     tabTitle: "ConvNeXt & ConvLSTM",
@@ -1908,288 +1994,759 @@ Pinky  Ring   Mid   Index  Index   |  Index Index  Mid   Ring  Pinky
   },
 ];
 
-function ResearchLogBookSection() {
-  const [activePageIndex, setActivePageIndex] = useState(0);
-  const [isFlipping, setIsFlipping] = useState(false);
-  const activePage = researchPages[activePageIndex];
 
-  const handlePageChange = (newIndex: number) => {
-    if (newIndex < 0 || newIndex >= researchPages.length || newIndex === activePageIndex) return;
-    setIsFlipping(true);
-    setTimeout(() => {
-      setActivePageIndex(newIndex);
-      setIsFlipping(false);
-    }, 180);
-  };
+
+// Helper component to render an authentic single printed notebook page with paper physics
+function BookPageFace({
+  page,
+  side,
+  pageNumber,
+  isTurning = false,
+  shadowIntensity = 0,
+}: {
+  page: LogPage;
+  side: "left" | "right";
+  pageNumber: number;
+  isTurning?: boolean;
+  shadowIntensity?: number;
+}) {
+  const isToc = page.id === "index-toc";
 
   return (
-    <section id="research-book" className="relative border-t border-border/80 bg-background px-4 py-20 sm:px-8 sm:py-28 lg:px-14 overflow-hidden">
-      {/* Background Accent Grids */}
+    <div
+      className={cn(
+        "w-full h-full p-2.5 xs:p-3.5 sm:p-5 md:p-6 flex flex-col justify-between relative text-foreground select-none overflow-hidden",
+        "bg-[#faf7f2] dark:bg-[#131215]",
+        side === "left"
+          ? "border-r border-zinc-300/70 dark:border-zinc-800/80 shadow-[inset_-22px_0_28px_-12px_rgba(0,0,0,0.16)]"
+          : "shadow-[inset_22px_0_28px_-12px_rgba(0,0,0,0.16)]"
+      )}
+    >
+      {/* 1. Authentic Paper Grain & Speckle Background */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
+        className="pointer-events-none absolute inset-0 opacity-[0.045] dark:opacity-[0.06]"
         style={{
-          backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
+          backgroundImage: "radial-gradient(circle at 50% 50%, currentColor 0.8px, transparent 0.8px)",
+          backgroundSize: "8px 8px",
         }}
-        aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-[1300px]">
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10 sm:pb-14 border-b border-border/60">
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-foreground/40 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground" />
-              </span>
-              <span className="text-[11px] font-mono tracking-widest text-muted-foreground uppercase font-semibold">
-                Field Notes &amp; Active Research
-              </span>
-            </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-foreground leading-[1.08]">
-              The Research Log. <br />
-              <span className="italic font-normal text-muted-foreground">what I am reading, building &amp; exploring this week.</span>
-            </h2>
-          </div>
-          <div className="max-w-xs text-xs font-mono text-muted-foreground leading-relaxed">
-            <span className="text-foreground font-medium block mb-1">// LIVE NOTEBOOK</span>
-            An authentic lab log of current deep learning experiments, cyclone intensity math, ergonomic habits, and active literature.
-          </div>
-        </div>
+      {/* 2. Realistic Notebook Ruling Lines */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.035] dark:opacity-[0.04]"
+        style={{
+          backgroundImage: "linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+          backgroundSize: "100% 21px",
+        }}
+      />
 
-        {/* Interactive Bookmark Tabs Header */}
-        <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-2 sm:gap-2.5 pb-2">
-          {researchPages.map((page, idx) => {
-            const Icon = page.icon;
-            const isActive = idx === activePageIndex;
-            return (
-              <button
-                key={page.id}
-                type="button"
-                onClick={() => handlePageChange(idx)}
-                className={cn(
-                  "group relative inline-flex items-center gap-2 rounded-t-xl border px-3.5 py-2.5 text-xs font-mono transition-all duration-200 active:scale-95",
-                  isActive
-                    ? "border-b-transparent border-foreground/30 bg-background text-foreground shadow-md font-semibold -mb-[1px] z-20"
-                    : "border-border/60 bg-foreground/[0.03] text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground hover:border-border"
-                )}
-                data-cursor={`open ${page.tabTitle}`}
-              >
-                {isActive && (
-                  <span className="absolute -top-1 left-3 right-3 h-[2px] bg-foreground rounded-full" />
-                )}
-                <Icon className={cn("h-3.5 w-3.5 transition-transform group-hover:scale-110", isActive ? "text-foreground" : "text-muted-foreground")} />
-                <span>0{idx + 1}. {page.tabTitle}</span>
-                {isActive && (
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
-                )}
-              </button>
-            );
-          })}
-        </div>
+      {/* 3. Red Vertical Notebook Margin on Left Page */}
+      {side === "left" && (
+        <div className="pointer-events-none absolute top-0 bottom-0 left-4 sm:left-9 w-[1.5px] bg-red-500/25 dark:bg-red-400/20" />
+      )}
 
-        {/* The Open Research Notebook (Two-Page Spread Design) */}
+      {/* 4. Dynamic Lighting Specular Highlight & Page Curl Shadow */}
+      {isTurning && shadowIntensity > 0 && (
         <div
-          className={cn(
-            "relative rounded-2xl rounded-tl-none border border-border/80 bg-background dark:bg-zinc-950/80 shadow-2xl backdrop-blur-md overflow-hidden transition-opacity duration-200",
-            isFlipping ? "opacity-40 scale-[0.995]" : "opacity-100 scale-100"
-          )}
-        >
-          {/* Top Leather Binding & Book Stitch Line */}
-          <div className="relative flex items-center justify-between border-b border-border/60 bg-foreground/[0.02] px-5 py-3 sm:px-8">
-            <div className="flex items-center gap-3">
-              <span className="h-2 w-2 rounded-full bg-foreground/30" />
-              <span className="text-[10px] sm:text-[11px] font-mono tracking-widest text-muted-foreground uppercase">
-                {activePage.chapter}
-              </span>
+          className="pointer-events-none absolute inset-0 transition-opacity duration-75 z-20"
+          style={{
+            background:
+              side === "right"
+                ? `linear-gradient(to right, rgba(0,0,0,${shadowIntensity * 0.45}) 0%, rgba(255,255,255,${shadowIntensity * 0.2}) 40%, rgba(0,0,0,${shadowIntensity * 0.35}) 100%)`
+                : `linear-gradient(to left, rgba(0,0,0,${shadowIntensity * 0.45}) 0%, rgba(255,255,255,${shadowIntensity * 0.2}) 40%, rgba(0,0,0,${shadowIntensity * 0.35}) 100%)`,
+          }}
+        />
+      )}
+
+      {/* 5. Left Page Content vs Right Page Content */}
+      {side === "left" ? (
+        isToc ? (
+          /* TABLE OF CONTENTS - LEFT PAGE */
+          <div className="relative z-10 space-y-1.5 sm:space-y-2.5">
+            <div className="inline-flex items-center gap-1.5 px-1.5 sm:px-2 py-0.5 rounded bg-amber-500/10 border border-amber-600/30 text-[7px] xs:text-[8px] sm:text-[8.5px] font-mono uppercase tracking-wider text-amber-700 dark:text-amber-300 font-semibold shadow-xs">
+              <Bookmark className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-amber-600 dark:text-amber-400" />
+              <span>{page.leftPage.badge}</span>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="hidden sm:inline-block px-2.5 py-0.5 text-[9px] font-mono rounded-full border border-border bg-foreground/[0.03] text-foreground/80 uppercase tracking-wider font-medium">
-                {activePage.status}
-              </span>
-              <span className="text-[10px] font-mono text-muted-foreground/70">{activePage.dateStamp}</span>
+
+            <div>
+              <h3 className="font-serif text-sm xs:text-base sm:text-xl font-bold tracking-tight text-foreground leading-snug">
+                Table of Contents
+              </h3>
+              <p className="text-[8.5px] xs:text-[9.5px] sm:text-[10.5px] text-muted-foreground mt-0.5 line-clamp-2">
+                {page.leftPage.paragraphs[0]}
+              </p>
+            </div>
+
+            {/* Dotted Leader Index Table */}
+            <div className="space-y-1 sm:space-y-1.5 pt-0.5 sm:pt-1 font-mono text-[8px] xs:text-[9px] sm:text-[10.5px]">
+              {[
+                { num: "01", title: "ConvNeXt & ConvLSTM Cells", page: "P. 03" },
+                { num: "02", title: "Cyclone Dynamics & EIR Formulas", page: "P. 05" },
+                { num: "03", title: "Dvorak Keymap & Ergonomics", page: "P. 07" },
+                { num: "04", title: "Reading Stack & Foundational Papers", page: "P. 09" },
+              ].map((item) => (
+                <div key={item.num} className="flex items-baseline justify-between gap-1">
+                  <span className="text-amber-600 dark:text-amber-400 font-bold text-[7.5px] sm:text-[9px] shrink-0">
+                    {item.num}.
+                  </span>
+                  <span className="text-foreground/90 font-medium truncate">
+                    {item.title}
+                  </span>
+                  <span className="flex-1 border-b border-dotted border-foreground/30 mx-1 mb-0.5" />
+                  <span className="text-muted-foreground font-bold text-[7.5px] sm:text-[9px] shrink-0">
+                    {item.page}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-1 sm:pt-1.5 border-t border-border/40">
+              <Scribble rotate={-2} className="text-foreground/80 text-[0.7rem] sm:text-[0.85rem] leading-tight">
+                ✦ All entries actively synced with local experimental branches.
+              </Scribble>
             </div>
           </div>
+        ) : (
+          /* REGULAR DISPATCH - LEFT PAGE */
+          <div className="relative z-10 space-y-1.5 sm:space-y-2.5">
+            <div className="inline-flex items-center gap-1.5 px-1.5 sm:px-2 py-0.5 rounded bg-foreground/[0.04] border border-border/70 text-[7.5px] sm:text-[8.5px] font-mono uppercase tracking-wider text-muted-foreground shadow-xs">
+              <Bookmark className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-foreground/70" />
+              <span>{page.leftPage.badge}</span>
+            </div>
 
-          {/* Book Interior (Two Columns on Large Screens) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-border/60">
-            {/* LEFT PAGE: Theoretical Principles, Architecture & Equations */}
-            <div className="p-6 sm:p-8 lg:p-10 lg:col-span-6 flex flex-col justify-between relative bg-background/50">
-              {/* Subtle Grid Watermark on Left Page */}
+            <h3 className="font-serif text-sm xs:text-base sm:text-xl font-medium tracking-tight text-foreground leading-snug">
+              {page.leftPage.heading}
+            </h3>
+
+            <p className="text-[9px] xs:text-[10px] sm:text-[11px] text-muted-foreground leading-relaxed line-clamp-2 sm:line-clamp-3">
+              {page.leftPage.paragraphs[0]}
+            </p>
+
+            {/* Equation Box with Paper Inset Border */}
+            {page.leftPage.equation && (
+              <div className="rounded-lg border border-border/80 bg-foreground/[0.025] p-1.5 sm:p-2.5 font-mono shadow-xs">
+                <span className="text-[7.5px] sm:text-[8.5px] text-muted-foreground block mb-0.5 uppercase tracking-wider font-semibold">
+                  {page.leftPage.equation.label}
+                </span>
+                <div className="py-0.5 text-[9px] xs:text-[10px] sm:text-[11px] text-foreground font-semibold tracking-wide overflow-x-hidden">
+                  {page.leftPage.equation.code}
+                </div>
+                <p className="text-[7px] sm:text-[8px] text-muted-foreground/80 italic line-clamp-1">
+                  {page.leftPage.equation.caption}
+                </p>
+              </div>
+            )}
+
+            {/* Key Bullet Invariants */}
+            <div className="space-y-0.5 sm:space-y-1 pt-0.5">
+              {page.leftPage.keyPoints.slice(0, 2).map((point, kIdx) => (
+                <div key={kIdx} className="flex items-start gap-1 text-[8.5px] xs:text-[9.5px] sm:text-[10.5px] text-foreground/85 leading-snug">
+                  <span className="text-foreground/40 font-mono text-[8px] sm:text-[9px] mt-0.5">•</span>
+                  <span className="line-clamp-2">{point}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      ) : (
+        isToc ? (
+          /* TABLE OF CONTENTS - RIGHT PAGE (Research Methodology & Telemetry) */
+          <div className="relative z-10 space-y-1.5 sm:space-y-2.5">
+            <div className="flex items-center justify-between">
+              <h4 className="font-serif text-xs xs:text-sm sm:text-lg font-bold tracking-tight text-foreground">
+                {page.rightPage.notesHeading}
+              </h4>
+              <span className="text-[7px] sm:text-[8.5px] font-mono text-muted-foreground/70 uppercase">MANIFESTO</span>
+            </div>
+
+            <ul className="space-y-0.5 sm:space-y-1">
+              {page.rightPage.workingNotes.slice(0, 2).map((note, nIdx) => (
+                <li key={nIdx} className="flex items-start gap-1 text-[8.5px] xs:text-[9.5px] sm:text-[10.5px] text-muted-foreground leading-snug">
+                  <span className="text-amber-500 font-mono text-[8px] sm:text-[9px] mt-0.5">▸</span>
+                  <span className="line-clamp-2">{note}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Hardware / Telemetry Stack */}
+            <div className="rounded-lg border border-border/80 bg-foreground/[0.025] p-1.5 sm:p-2 font-mono text-[7.5px] xs:text-[8px] sm:text-[9px]">
+              <span className="text-[7px] sm:text-[8px] text-muted-foreground block mb-0.5 sm:mb-1 uppercase tracking-wider font-semibold">
+                ACTIVE LAB TELEMETRY &amp; TOOLCHAIN:
+              </span>
+              <div className="grid grid-cols-2 gap-0.5 sm:gap-1 text-foreground/90">
+                <div className="flex items-center gap-1 truncate">
+                  <span className="text-amber-500">▪</span> <span>PyTorch 2.x + CUDA</span>
+                </div>
+                <div className="flex items-center gap-1 truncate">
+                  <span className="text-amber-500">▪</span> <span>INSAT-3D TIR Bands</span>
+                </div>
+                <div className="flex items-center gap-1 truncate">
+                  <span className="text-amber-500">▪</span> <span>Ergonomic Dvorak</span>
+                </div>
+                <div className="flex items-center gap-1 truncate">
+                  <span className="text-amber-500">▪</span> <span>Distributed Microservices</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Handwritten Margin Note */}
+            <div className="p-1.5 sm:p-2 rounded-lg border border-dashed border-border/80 bg-foreground/[0.02]">
+              <Scribble rotate={page.rightPage.marginScribble.rotate} className="text-foreground/90 text-[0.7rem] sm:text-[0.85rem] font-medium leading-tight">
+                ✦ {page.rightPage.marginScribble.text}
+              </Scribble>
+            </div>
+          </div>
+        ) : (
+          /* REGULAR DISPATCH - RIGHT PAGE */
+          <div className="relative z-10 space-y-1.5 sm:space-y-2.5">
+            <div className="flex items-center justify-between">
+              <h4 className="font-serif text-xs xs:text-sm sm:text-lg font-medium tracking-tight text-foreground">
+                {page.rightPage.notesHeading}
+              </h4>
+              <span className="text-[7px] sm:text-[8.5px] font-mono text-muted-foreground/70 uppercase">OBSERVATIONS</span>
+            </div>
+
+            {/* Working Observations */}
+            <ul className="space-y-0.5 sm:space-y-1">
+              {page.rightPage.workingNotes.slice(0, 2).map((note, nIdx) => (
+                <li key={nIdx} className="flex items-start gap-1 text-[8.5px] xs:text-[9.5px] sm:text-[10.5px] text-muted-foreground leading-snug">
+                  <span className="text-foreground/50 font-mono text-[8px] sm:text-[9px] mt-0.5">▸</span>
+                  <span className="line-clamp-2">{note}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Clean Terminal Snippet */}
+            {page.rightPage.codeBlock && (
+              <div className="rounded-lg border border-border/80 bg-zinc-950 text-zinc-200 overflow-hidden shadow-sm">
+                <div className="flex items-center justify-between border-b border-zinc-800 bg-zinc-900/90 px-2 py-0.5 sm:px-2.5 sm:py-1">
+                  <span className="text-[7.5px] sm:text-[8.5px] font-mono text-zinc-400 truncate max-w-[100px] sm:max-w-[120px]">
+                    {page.rightPage.codeBlock.filename}
+                  </span>
+                  <span className="text-[7px] sm:text-[8px] font-mono uppercase tracking-widest text-zinc-500">
+                    {page.rightPage.codeBlock.lang}
+                  </span>
+                </div>
+                <pre className="p-1.5 sm:p-2 text-[8px] xs:text-[8.5px] sm:text-[9.5px] font-mono leading-tight overflow-hidden text-zinc-300 max-h-[65px] sm:max-h-[85px]">
+                  <code>{page.rightPage.codeBlock.code}</code>
+                </pre>
+              </div>
+            )}
+
+            {/* Handwritten Margin Note with slight rotation */}
+            <div className="p-1.5 sm:p-2 rounded-lg border border-dashed border-border/80 bg-foreground/[0.02]">
+              <Scribble rotate={page.rightPage.marginScribble.rotate} className="text-foreground/90 text-[0.7rem] sm:text-[0.85rem] font-medium leading-tight">
+                ✦ {page.rightPage.marginScribble.text}
+              </Scribble>
+            </div>
+          </div>
+        )
+      )}
+
+      {/* Page Footer */}
+      <div className="pt-1.5 sm:pt-2 border-t border-border/40 flex items-center justify-between text-[7.5px] sm:text-[9px] font-mono text-muted-foreground/60 shrink-0">
+        <span className="truncate max-w-[120px] sm:max-w-[170px]">
+          {side === "left" ? "SACHIN YADAV // FIELD NOTES" : page.rightPage.actionStatus}
+        </span>
+        <span>PAGE 0{pageNumber}</span>
+      </div>
+    </div>
+  );
+}
+
+// Reusable component for the Front Cover Leather & Gold Foil Artwork
+function FrontCoverArtwork({
+  glintX,
+  glintY,
+  roundedClass = "rounded-r-2xl",
+}: {
+  glintX: number;
+  glintY: number;
+  roundedClass?: string;
+}) {
+  return (
+    <div className={cn("absolute inset-0 border-2 border-amber-800/60 bg-[#151311] overflow-hidden p-3.5 sm:p-5 md:p-6 flex flex-col justify-between select-none [backface-visibility:hidden] shadow-[inset_0_0_80px_rgba(0,0,0,0.9),0_25px_50px_rgba(0,0,0,0.8)]", roundedClass)}>
+      {/* Leather grain & texture */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.15] mix-blend-overlay"
+        style={{
+          backgroundImage: "radial-gradient(circle at 50% 50%, #d4af37 1px, transparent 1px)",
+          backgroundSize: "6px 6px",
+        }}
+      />
+
+      {/* Dynamic Specular Sheen moving with mouse */}
+      <div
+        className="pointer-events-none absolute inset-0 transition-opacity duration-150"
+        style={{
+          background: `radial-gradient(circle 380px at ${glintX}% ${glintY}%, rgba(255,223,130,0.24) 0%, rgba(255,255,255,0.04) 40%, transparent 70%)`,
+        }}
+      />
+
+      {/* 4 Ornate Brass Filigree Hardware Corners */}
+      <div className="absolute top-2 left-2 w-7 h-7 border-t-2 border-l-2 border-amber-400 rounded-tl-sm pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+        <div className="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-amber-200/90 shadow-sm" />
+        <div className="absolute top-0.5 left-2 w-2 h-[1px] bg-amber-500/60" />
+        <div className="absolute top-2 left-0.5 w-[1px] h-2 bg-amber-500/60" />
+      </div>
+      <div className="absolute top-2 right-2 w-7 h-7 border-t-2 border-r-2 border-amber-400 rounded-tr-sm pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+        <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-amber-200/90 shadow-sm" />
+        <div className="absolute top-0.5 right-2 w-2 h-[1px] bg-amber-500/60" />
+        <div className="absolute top-2 right-0.5 w-[1px] h-2 bg-amber-500/60" />
+      </div>
+      <div className="absolute bottom-2 left-2 w-7 h-7 border-b-2 border-l-2 border-amber-400 rounded-bl-sm pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+        <div className="absolute bottom-1 left-1 w-1.5 h-1.5 rounded-full bg-amber-200/90 shadow-sm" />
+        <div className="absolute bottom-0.5 left-2 w-2 h-[1px] bg-amber-500/60" />
+        <div className="absolute bottom-2 left-0.5 w-[1px] h-2 bg-amber-500/60" />
+      </div>
+      <div className="absolute bottom-2 right-2 w-7 h-7 border-b-2 border-r-2 border-amber-400 rounded-br-sm pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+        <div className="absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full bg-amber-200/90 shadow-sm" />
+        <div className="absolute bottom-0.5 right-2 w-2 h-[1px] bg-amber-500/60" />
+        <div className="absolute bottom-2 right-0.5 w-[1px] h-2 bg-amber-500/60" />
+      </div>
+
+      {/* Saddle Stitching Gold Thread Border */}
+      <div className="absolute inset-3 rounded-xl border border-dashed border-amber-500/35 pointer-events-none" />
+      <div className="absolute inset-4.5 rounded-lg border border-amber-500/20 pointer-events-none" />
+
+      {/* Top Foil Header */}
+      <div className="relative z-10 text-center pt-0.5">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-[7.5px] sm:text-[8px] font-mono uppercase tracking-[0.22em] text-amber-300 font-semibold shadow-inner">
+          <ShieldCheck className="h-2.5 w-2.5 text-amber-400" />
+          <span>ARCHIVAL LAB JOURNAL • NO. 402</span>
+        </div>
+        <span className="text-[7px] sm:text-[7.5px] font-mono tracking-[0.25em] uppercase text-zinc-400 block mt-1">
+          EST. 2026 // NEURAL SYSTEMS &amp; ALGORITHMS
+        </span>
+      </div>
+
+      {/* Centerpiece Embossed Insignia */}
+      <div className="relative z-10 text-center my-auto py-1 sm:py-2">
+        {/* Celestial Orbit & Astrolabe Insignia */}
+        <div className="relative mx-auto w-16 h-16 sm:w-22 sm:h-22 mb-2 sm:mb-3 flex items-center justify-center">
+          <div className="absolute inset-0 rounded-full border border-amber-500/40 animate-[spin_20s_linear_infinite]" />
+          <div className="absolute inset-1.5 rounded-full border border-dashed border-amber-400/30 animate-[spin_12s_linear_infinite_reverse]" />
+          <div className="absolute inset-3.5 rounded-full border border-amber-500/50 bg-gradient-to-br from-amber-500/20 via-amber-700/10 to-transparent flex items-center justify-center shadow-[inset_0_0_15px_rgba(217,119,6,0.3)]">
+            <div className="relative flex items-center justify-center">
+              <Compass className="h-6 w-6 sm:h-8 sm:w-8 text-amber-300 drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]" />
+              <Atom className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-amber-200 absolute -top-1 -right-1 animate-pulse" />
+            </div>
+          </div>
+          {/* Cardinal Point Markers */}
+          <span className="absolute -top-1 font-mono text-[7px] text-amber-400/80 font-bold">N</span>
+          <span className="absolute -bottom-1 font-mono text-[7px] text-amber-400/80 font-bold">S</span>
+          <span className="absolute -left-1 font-mono text-[7px] text-amber-400/80 font-bold">W</span>
+          <span className="absolute -right-1 font-mono text-[7px] text-amber-400/80 font-bold">E</span>
+        </div>
+
+        <div className="text-[7.5px] sm:text-[8px] font-serif italic tracking-widest uppercase text-amber-400/70 mb-1">
+          « Nullius In Verba »
+        </div>
+
+        <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] leading-tight">
+          The Research Log
+        </h3>
+
+        <div className="w-16 sm:w-20 h-[1.5px] bg-gradient-to-r from-transparent via-amber-400/60 to-transparent mx-auto my-1.5 sm:my-2" />
+
+        <p className="text-[7.5px] sm:text-[8.5px] font-mono tracking-wider uppercase text-amber-200/90 font-medium line-clamp-1">
+          ConvNeXt • ConvLSTM • Cyclones • Dvorak
+        </p>
+      </div>
+
+      {/* Bottom Author Seal */}
+      <div className="relative z-10 text-center pb-0.5">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-amber-600/40 bg-black/40 shadow-sm">
+          <Feather className="h-2.5 w-2.5 text-amber-400" />
+          <span className="text-[8px] sm:text-[8.5px] font-mono tracking-[0.2em] uppercase text-amber-200 font-bold">
+            SACHIN YADAV
+          </span>
+        </div>
+        <span className="text-[7px] font-mono text-zinc-500 uppercase block mt-1 tracking-wider">
+          SCROLL DOWN TO UNLOCK &amp; OPEN JOURNAL ↓
+        </span>
+      </div>
+
+      {/* Red Silk Bookmark Ribbon with Notch */}
+      <div className="absolute -bottom-7 left-8 sm:left-10 w-3.5 sm:w-4 h-12 bg-gradient-to-b from-red-800 to-red-600 shadow-lg rounded-b z-30 flex items-end justify-center pb-1 border-b border-amber-400/40">
+        <div className="w-1.5 h-1.5 rotate-45 bg-amber-400/80" />
+      </div>
+    </div>
+  );
+}
+
+// Helper component for the authentic Vintage Leather Cover & Marbled Endpaper (rotating leaf)
+function BookCover({
+  coverAngle,
+  glintX,
+  glintY,
+}: {
+  coverAngle: number;
+  glintX: number;
+  glintY: number;
+}) {
+  return (
+    <div
+      className="absolute right-0 top-0 w-1/2 h-full origin-left [transform-style:preserve-3d] z-40 shadow-2xl transition-transform duration-75"
+      style={{
+        transform: `rotateY(${coverAngle}deg)`,
+      }}
+    >
+      {/* 1. FRONT OF COVER (Visible when closed, rotateY: 0deg to -90deg) */}
+      <FrontCoverArtwork glintX={glintX} glintY={glintY} roundedClass="rounded-r-2xl" />
+
+      {/* 2. BACK OF FRONT COVER (Marbled Endpaper + Ex Libris Bookplate landing on Left) */}
+      <div className="absolute inset-0 rounded-l-2xl bg-[#1c1917] border-2 border-amber-900/40 p-4 sm:p-5 flex flex-col justify-between select-none shadow-[inset_0_0_60px_rgba(0,0,0,0.85)] [transform:rotateY(180deg)] [backface-visibility:hidden]">
+        {/* Marbled Paper Texture Effect */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.22] mix-blend-screen"
+          style={{
+            backgroundImage:
+              "repeating-radial-gradient(circle at 30% 40%, #78350f 0px, #1c1917 12px, #92400e 24px, #0f172a 36px)",
+            backgroundSize: "180px 180px",
+          }}
+        />
+
+        {/* Vintage Ex Libris Archival Bookplate */}
+        <div className="relative z-10 m-auto w-full max-w-[260px] sm:max-w-[280px] rounded-lg border-2 border-double border-amber-600/60 bg-[#faf6ee] dark:bg-[#181614] p-3.5 sm:p-4 text-center text-foreground shadow-xl">
+          <div className="border border-dashed border-amber-700/40 p-2.5 sm:p-3">
+            <span className="font-serif text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-amber-700 dark:text-amber-400 font-bold block">
+              EX LIBRIS
+            </span>
+            <h4 className="font-serif text-base sm:text-lg font-bold tracking-tight text-foreground my-0.5 sm:my-1">
+              Sachin Yadav
+            </h4>
+            <div className="w-12 h-[1px] bg-amber-600/50 mx-auto my-1.5" />
+            <p className="text-[8px] sm:text-[8.5px] font-mono text-muted-foreground leading-relaxed line-clamp-3">
+              Personal Research &amp; Architectural Field Journal. Dedicated to exploring deep neural vision, distributed mechanics, and elegant computing paradigms.
+            </p>
+            <div className="mt-2 pt-1.5 border-t border-amber-600/30 flex items-center justify-between text-[7px] sm:text-[7.5px] font-mono text-muted-foreground/80 uppercase">
+              <span>VOL. 01 / LAB 2026</span>
+              <span>CONFIDENTIAL</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative z-10 text-center text-[7.5px] font-mono text-zinc-500 uppercase tracking-widest">
+          FIELD NOTE DISPATCHES • READY
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResearchLogBookSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [scrollP, setScrollP] = useState(0);
+
+  // 3D Gyroscope / Mouse Parallax Tilt State
+  const [mouseTilt, setMouseTilt] = useState({ x: 0, y: 0, glintX: 50, glintY: 50 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const nx = (e.clientX - rect.left) / rect.width;
+    const ny = (e.clientY - rect.top) / rect.height;
+    setMouseTilt({
+      x: (ny - 0.5) * -10, // -5deg to +5deg pitch
+      y: (nx - 0.5) * 14,  // -7deg to +7deg yaw
+      glintX: nx * 100,
+      glintY: ny * 100,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setMouseTilt({ x: 0, y: 0, glintX: 50, glintY: 50 });
+  };
+
+  useEffect(() => {
+    let frame = 0;
+    const tick = () => {
+      frame = 0;
+      const node = sectionRef.current;
+      if (!node) return;
+      const rect = node.getBoundingClientRect();
+      const distance = node.offsetHeight - window.innerHeight;
+      const p = Math.min(1, Math.max(0, -rect.top / Math.max(1, distance)));
+      setScrollP(p);
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
+
+    tick();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  // ---------------------------------------------------------------------------
+  // Physical Book Animation Flow (5 Spreads):
+  // p: 0.00 -> 0.14 : Closed Hardcover Book resting in center (100% SINGLE-SIDED)
+  // p: 0.14 -> 0.26 : Cover OPENS in 3D (0deg -> -180deg) into 2-page spread
+  // p: 0.26 -> 0.44 : Spread 0 (Table of Contents & Index)
+  // p: 0.44 -> 0.62 : Spread 1 (ConvNeXt & ConvLSTM)
+  // p: 0.62 -> 0.80 : Spread 2 (Cyclone Dynamics & Dvorak)
+  // p: 0.80 -> 0.92 : Spread 3 (Dvorak Layout & Flow)
+  // p: 0.92 -> 1.00 : Spread 4 (Reading Stack & Papers)
+  // ---------------------------------------------------------------------------
+
+  const isCoverClosed = scrollP < 0.14;
+  const isBookFullyOpen = scrollP >= 0.26;
+
+  // Cover opening angle: 0deg when closed, -180deg when fully opened
+  const coverT = Math.min(1, Math.max(0, (scrollP - 0.14) / 0.12));
+  const coverAngle = coverT * -180;
+
+  // Calculate which spread is active & its internal flip progress across 5 spreads
+  const openProgress = Math.min(1, Math.max(0, (scrollP - 0.26) / 0.74));
+  const scaledProgress = openProgress * 4; // 0 to 4 range across 5 spreads
+  const currentSpreadIdx = Math.min(4, Math.floor(scaledProgress));
+  const intraProgress = scaledProgress - currentSpreadIdx;
+
+  // Page turn physics calculations:
+  const isTurningLeaf = isBookFullyOpen && currentSpreadIdx < 4 && intraProgress > 0.65;
+  const leafTurnT = isTurningLeaf ? (intraProgress - 0.65) / 0.35 : 0;
+  const leafAngle = leafTurnT * -180; // 0deg -> -180deg
+  
+  // Physical Paper Arch & Curl physics:
+  const archProgress = Math.sin(leafTurnT * Math.PI);
+  const paperSkewY = archProgress * 3.2; // 3.2deg flex
+  const paperRotateZ = (leafTurnT - 0.5) * archProgress * -3.5; // realistic corner lift
+  const shadowIntensity = archProgress;
+
+  const currentSpread = researchPages[currentSpreadIdx];
+  const nextSpread = researchPages[Math.min(4, currentSpreadIdx + 1)];
+
+  // Stack thickness calculations
+  const leftStackPx = isBookFullyOpen ? currentSpreadIdx * 2 + 2 : 2;
+  const rightStackPx = isBookFullyOpen ? (4 - currentSpreadIdx) * 2 + 2 : 8;
+
+  return (
+    <section
+      id="research-book"
+      ref={sectionRef}
+      className="relative h-[420vh] border-t border-border/80 bg-background"
+    >
+      {/* Sticky Viewport Stage */}
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 overflow-hidden">
+        {/* Header Badges */}
+        <div className="text-center mb-2 sm:mb-3 max-w-lg mx-auto select-none flex flex-col items-center z-10">
+          <div className="inline-flex items-center gap-2 mb-1">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-foreground/40 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground" />
+            </span>
+            <span className="text-[10px] font-mono tracking-widest text-muted-foreground uppercase font-semibold">
+              Live Field Journal
+            </span>
+          </div>
+
+          <h2 className="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-foreground">
+            The Research Book.
+          </h2>
+          <p className="text-[11px] font-mono text-muted-foreground mt-0.5">
+            {isCoverClosed && "Scroll down to unfold journal ↓"}
+            {!isCoverClosed && !isBookFullyOpen && "Lifting hardcover & revealing pages..."}
+            {isBookFullyOpen && (currentSpreadIdx === 0 ? "Table of Contents & Index // Scroll to turn pages ↓" : `Dispatch 0${currentSpreadIdx} of 04 // ${currentSpread.tabTitle} ↓`)}
+          </p>
+        </div>
+
+        {/* 3D Physical Book Stage with Gyroscopic Hover Physics */}
+        <div
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className="relative w-full max-w-[840px] h-[450px] xs:h-[480px] sm:h-[510px] flex items-center justify-center [perspective:2200px]"
+        >
+          {/* ============================================================== */}
+          {/* CASE 1: CLOSED BOOK (100% SINGLE-SIDED, CENTERED HARDCOVER)     */}
+          {/* ============================================================== */}
+          {isCoverClosed ? (
+            <div
+              className="relative w-[300px] xs:w-[350px] sm:w-[410px] h-[440px] xs:h-[480px] sm:h-[510px] rounded-2xl border-2 border-zinc-800/90 bg-[#121110] p-1.5 sm:p-2 shadow-[0_35px_80px_-15px_rgba(0,0,0,0.9),0_10px_30px_rgba(0,0,0,0.5)] transition-transform duration-150 ease-out origin-center [transform-style:preserve-3d]"
+              style={{
+                transform: `rotateX(${mouseTilt.x}deg) rotateY(${mouseTilt.y}deg)`,
+              }}
+            >
+              {/* Raised Spine Binding Straps on Left Edge */}
+              <div className="absolute -left-2 top-10 w-2 h-5 bg-gradient-to-r from-amber-800 to-amber-950 rounded-l shadow-md border-y border-l border-amber-600/40 z-30" />
+              <div className="absolute -left-2 top-28 w-2 h-5 bg-gradient-to-r from-amber-800 to-amber-950 rounded-l shadow-md border-y border-l border-amber-600/40 z-30" />
+              <div className="absolute -left-2 bottom-28 w-2 h-5 bg-gradient-to-r from-amber-800 to-amber-950 rounded-l shadow-md border-y border-l border-amber-600/40 z-30" />
+              <div className="absolute -left-2 bottom-10 w-2 h-5 bg-gradient-to-r from-amber-800 to-amber-950 rounded-l shadow-md border-y border-l border-amber-600/40 z-30" />
+
+              {/* Compressed Page Stack on Right Edge */}
+              <div className="absolute -right-2 top-3 bottom-3 w-2.5 rounded-r bg-gradient-to-r from-zinc-400 to-zinc-300 dark:from-zinc-800 dark:to-zinc-700 border-r border-zinc-500/30" />
+
+              {/* Single Front Cover Face */}
+              <div className="relative w-full h-full rounded-xl overflow-hidden shadow-inner">
+                <FrontCoverArtwork glintX={mouseTilt.glintX} glintY={mouseTilt.glintY} roundedClass="rounded-xl" />
+              </div>
+
+              {/* Red Silk Ribbon trailing through bottom center */}
+              <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 w-4 h-12 bg-gradient-to-b from-red-800 to-red-600 shadow-md rounded-b z-30 flex items-end justify-center pb-1 border-b border-amber-400/50">
+                <div className="w-1.5 h-1.5 rotate-45 bg-amber-400" />
+              </div>
+            </div>
+          ) : (
+            /* ============================================================== */
+            /* CASE 2: OPENING & OPEN BOOK (TWO-PAGE SPREAD WITH 3D TURNING)   */
+            /* ============================================================== */
+            <div
+              className="relative w-full h-full rounded-2xl border-2 border-zinc-800/90 bg-[#121110] p-2 sm:p-2.5 shadow-[0_35px_80px_-15px_rgba(0,0,0,0.9),0_10px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between transition-transform duration-150 ease-out origin-center [transform-style:preserve-3d]"
+              style={{
+                transform: `rotateX(${mouseTilt.x}deg) rotateY(${mouseTilt.y}deg)`,
+              }}
+            >
+              {/* 4 Solid Corner Brass Brackets */}
+              <div className="absolute top-1.5 left-1.5 w-5 h-5 border-t-2 border-l-2 border-amber-500/80 rounded-tl-sm pointer-events-none z-30" />
+              <div className="absolute top-1.5 right-1.5 w-5 h-5 border-t-2 border-r-2 border-amber-500/80 rounded-tr-sm pointer-events-none z-30" />
+              <div className="absolute bottom-1.5 left-1.5 w-5 h-5 border-b-2 border-l-2 border-amber-500/80 rounded-bl-sm pointer-events-none z-30" />
+              <div className="absolute bottom-1.5 right-1.5 w-5 h-5 border-b-2 border-r-2 border-amber-500/80 rounded-br-sm pointer-events-none z-30" />
+
+              {/* Raised Spine Binding Straps on Left Edge */}
+              <div className="absolute -left-2 top-10 w-2 h-5 bg-gradient-to-r from-amber-800 to-amber-950 rounded-l shadow-md border-y border-l border-amber-600/40 z-30 hidden sm:block" />
+              <div className="absolute -left-2 top-28 w-2 h-5 bg-gradient-to-r from-amber-800 to-amber-950 rounded-l shadow-md border-y border-l border-amber-600/40 z-30 hidden sm:block" />
+              <div className="absolute -left-2 bottom-28 w-2 h-5 bg-gradient-to-r from-amber-800 to-amber-950 rounded-l shadow-md border-y border-l border-amber-600/40 z-30 hidden sm:block" />
+              <div className="absolute -left-2 bottom-10 w-2 h-5 bg-gradient-to-r from-amber-800 to-amber-950 rounded-l shadow-md border-y border-l border-amber-600/40 z-30 hidden sm:block" />
+
+              {/* Dynamic Compressed Page Stack Thickness on Sides */}
               <div
-                className="pointer-events-none absolute inset-0 opacity-[0.025] dark:opacity-[0.04]"
-                style={{
-                  backgroundImage: "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-                  backgroundSize: "20px 20px",
-                }}
+                className="absolute -left-1.5 top-3 bottom-3 rounded-l bg-gradient-to-r from-zinc-300 to-zinc-400 dark:from-zinc-700 dark:to-zinc-800 transition-all duration-300 border-l border-zinc-500/30"
+                style={{ width: `${leftStackPx}px` }}
+              />
+              <div
+                className="absolute -right-1.5 top-3 bottom-3 rounded-r bg-gradient-to-r from-zinc-400 to-zinc-300 dark:from-zinc-800 dark:to-zinc-700 transition-all duration-300 border-r border-zinc-500/30"
+                style={{ width: `${rightStackPx}px` }}
               />
 
-              <div className="relative z-10">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-foreground/[0.04] border border-border/80 text-[10px] font-mono uppercase tracking-wider text-muted-foreground mb-4">
-                  <Bookmark className="h-3 w-3 text-foreground/70" />
-                  <span>{activePage.leftPage.badge}</span>
+              {/* Physical Colored Paper Index Divider Tabs on Right Edge */}
+              {isBookFullyOpen && (
+                <div className="absolute -right-3.5 sm:-right-5 top-12 bottom-12 flex flex-col justify-around pointer-events-auto z-40">
+                  {[
+                    { label: "INDEX", num: "00", color: "bg-amber-600 text-amber-50 border-amber-800", spread: 0 },
+                    { label: "VISION", num: "01", color: "bg-emerald-700 text-emerald-50 border-emerald-900", spread: 1 },
+                    { label: "CYCLONE", num: "02", color: "bg-sky-700 text-sky-50 border-sky-900", spread: 2 },
+                    { label: "DVORAK", num: "03", color: "bg-rose-700 text-rose-50 border-rose-900", spread: 3 },
+                    { label: "PAPERS", num: "04", color: "bg-violet-700 text-violet-50 border-violet-900", spread: 4 },
+                  ].map((tab) => {
+                    const isActive = currentSpreadIdx === tab.spread;
+                    return (
+                      <button
+                        key={tab.label}
+                        type="button"
+                        onClick={() => {
+                          if (sectionRef.current) {
+                            const distance = sectionRef.current.offsetHeight - window.innerHeight;
+                            const targetP = 0.26 + (tab.spread / 4) * 0.72;
+                            window.scrollTo({
+                              top: sectionRef.current.offsetTop + targetP * distance,
+                              behavior: "smooth",
+                            });
+                          }
+                        }}
+                        className={cn(
+                          "h-7 sm:h-8 rounded-r-md pl-1.5 pr-2 py-0.5 text-[7.5px] sm:text-[8px] font-mono font-bold tracking-tighter uppercase transition-all duration-200 flex items-center justify-center shadow-md border-y border-r",
+                          tab.color,
+                          isActive
+                            ? "translate-x-2 sm:translate-x-3.5 shadow-lg brightness-110 scale-105"
+                            : "opacity-60 hover:opacity-100 hover:translate-x-1"
+                        )}
+                        title={`Flip to ${tab.label}`}
+                      >
+                        <span className="hidden sm:inline">{tab.label}</span>
+                        <span className="sm:hidden">{tab.num}</span>
+                      </button>
+                    );
+                  })}
                 </div>
+              )}
 
-                <h3 className="font-serif text-2xl sm:text-3xl font-medium tracking-tight text-foreground leading-snug">
-                  {activePage.leftPage.heading}
-                </h3>
+              {/* Center Spine Stitch Line & Deep Gutter Shadow */}
+              <div className="absolute left-1/2 top-2 bottom-2 -translate-x-1/2 w-10 bg-gradient-to-r from-black/55 via-black/15 to-black/55 z-30 pointer-events-none hidden md:block" />
+              <div className="absolute left-1/2 top-2 bottom-2 -translate-x-1/2 w-[1.5px] bg-zinc-600/60 z-30 pointer-events-none hidden md:block" />
 
-                <div className="mt-4 space-y-3 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  {activePage.leftPage.paragraphs.map((p, pIdx) => (
-                    <p key={pIdx}>{p}</p>
-                  ))}
-                </div>
-
-                {/* Mathematical Equation Block if present */}
-                {activePage.leftPage.equation && (
-                  <div className="mt-6 rounded-xl border border-border/80 bg-foreground/[0.02] p-4 font-mono">
-                    <span className="text-[10px] text-muted-foreground block mb-1 uppercase tracking-wider font-semibold">
-                      {activePage.leftPage.equation.label}
-                    </span>
-                    <div className="py-2 text-xs sm:text-sm text-foreground font-semibold tracking-wide overflow-x-auto">
-                      {activePage.leftPage.equation.code}
-                    </div>
-                    <p className="mt-1 text-[10px] text-muted-foreground/80 leading-relaxed italic">
-                      {activePage.leftPage.equation.caption}
-                    </p>
-                  </div>
-                )}
-
-                {/* Bullet Points */}
-                <div className="mt-6 space-y-2">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-semibold block mb-2">
-                    // Key Technical Invariants
-                  </span>
-                  {activePage.leftPage.keyPoints.map((point, kIdx) => (
-                    <div key={kIdx} className="flex items-start gap-2.5 text-xs text-foreground/90 leading-relaxed">
-                      <span className="h-1.5 w-1.5 rounded-full bg-foreground/60 mt-1.5 shrink-0" />
-                      <span>{point}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Left Page Footer */}
-              <div className="relative z-10 mt-8 pt-4 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-muted-foreground/60">
-                <span>SACHIN YADAV // RESEARCH DISPATCH</span>
-                <span>PAGE 0{activePageIndex * 2 + 1}</span>
-              </div>
-            </div>
-
-            {/* RIGHT PAGE: Lab Notes, Implementation Snippet & Handwritten Reflection */}
-            <div className="p-6 sm:p-8 lg:p-10 lg:col-span-6 flex flex-col justify-between relative bg-background/80">
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-serif text-xl font-medium tracking-tight text-foreground">
-                    {activePage.rightPage.notesHeading}
-                  </h4>
-                  <span className="text-[10px] font-mono text-muted-foreground/70">WEEKLY LOG</span>
-                </div>
-
-                {/* Working Observations */}
-                <ul className="space-y-2.5">
-                  {activePage.rightPage.workingNotes.map((note, nIdx) => (
-                    <li key={nIdx} className="flex items-start gap-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                      <span className="text-foreground/50 font-mono text-xs mt-0.5">▸</span>
-                      <span>{note}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Code Snippet / Terminal Box */}
-                {activePage.rightPage.codeBlock && (
-                  <div className="mt-6 rounded-xl border border-border/80 bg-zinc-950 text-zinc-200 overflow-hidden shadow-md">
-                    <div className="flex items-center justify-between border-b border-zinc-800 bg-zinc-900/90 px-3.5 py-2">
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full bg-zinc-700" />
-                        <span className="h-2 w-2 rounded-full bg-zinc-700" />
-                        <span className="h-2 w-2 rounded-full bg-zinc-700" />
-                        <span className="ml-2 text-[10px] font-mono text-zinc-400">
-                          {activePage.rightPage.codeBlock.filename}
-                        </span>
-                      </div>
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500">
-                        {activePage.rightPage.codeBlock.lang}
-                      </span>
-                    </div>
-                    <pre className="p-3.5 text-[11px] sm:text-[11.5px] font-mono leading-relaxed overflow-x-auto text-zinc-300">
-                      <code>{activePage.rightPage.codeBlock.code}</code>
-                    </pre>
-                  </div>
-                )}
-
-                {/* Handwritten Margin Note in Notebook */}
-                <div className="mt-6 p-3.5 rounded-xl border border-dashed border-border/80 bg-foreground/[0.02]">
-                  <Scribble rotate={activePage.rightPage.marginScribble.rotate} className="text-foreground/90 font-medium">
-                    ✦ {activePage.rightPage.marginScribble.text}
-                  </Scribble>
-                </div>
-              </div>
-
-              {/* Right Page Footer */}
-              <div className="relative z-10 mt-8 pt-4 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-muted-foreground/60">
-                <span>{activePage.rightPage.actionStatus}</span>
-                <span>PAGE 0{activePageIndex * 2 + 2}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Book Bottom Navigation Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between border-t border-border/60 bg-foreground/[0.03] px-5 py-3.5 sm:px-8 gap-3">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => handlePageChange(activePageIndex - 1)}
-                disabled={activePageIndex === 0}
-                className={cn(
-                  "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-mono transition-all duration-150 active:scale-95",
-                  activePageIndex === 0
-                    ? "border-border/40 text-muted-foreground/40 cursor-not-allowed bg-transparent"
-                    : "border-border/80 bg-background text-foreground hover:bg-foreground/[0.06] hover:border-foreground/40 shadow-sm"
-                )}
-                data-cursor="previous page"
-              >
-                <ChevronLeft className="h-3.5 w-3.5" />
-                <span>Previous Entry</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handlePageChange(activePageIndex + 1)}
-                disabled={activePageIndex === researchPages.length - 1}
-                className={cn(
-                  "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-mono transition-all duration-150 active:scale-95",
-                  activePageIndex === researchPages.length - 1
-                    ? "border-border/40 text-muted-foreground/40 cursor-not-allowed bg-transparent"
-                    : "border-border/80 bg-background text-foreground hover:bg-foreground/[0.06] hover:border-foreground/40 shadow-sm"
-                )}
-                data-cursor="next page"
-              >
-                <span>Next Entry</span>
-                <ChevronRight className="h-3.5 w-3.5" />
-              </button>
-            </div>
-
-            {/* Page Indicator */}
-            <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-              <span>Entry 0{activePageIndex + 1} of 0{researchPages.length}</span>
-              <div className="flex items-center gap-1">
-                {researchPages.map((_, dotIdx) => (
-                  <button
-                    key={dotIdx}
-                    type="button"
-                    onClick={() => handlePageChange(dotIdx)}
-                    className={cn(
-                      "h-1.5 rounded-full transition-all duration-200",
-                      dotIdx === activePageIndex ? "w-5 bg-foreground" : "w-1.5 bg-muted-foreground/40 hover:bg-foreground/60"
-                    )}
-                    aria-label={`Go to page ${dotIdx + 1}`}
+              {/* Inside 3D Book Stage (Two-Page Base + Flipping Leaf + Opening Cover) */}
+              <div className="relative w-full h-full rounded-xl overflow-hidden shadow-inner flex [perspective:2200px] [transform-style:preserve-3d]">
+                {/* 1. LEFT PAGE (Base) */}
+                <div className="w-1/2 h-full relative">
+                  <BookPageFace
+                    page={currentSpread}
+                    side="left"
+                    pageNumber={currentSpreadIdx * 2 + 1}
                   />
-                ))}
+                </div>
+
+                {/* 2. RIGHT PAGE (Base - reveals next spread underneath turning leaf) */}
+                <div className="w-1/2 h-full relative">
+                  <BookPageFace
+                    page={isTurningLeaf ? nextSpread : (isBookFullyOpen ? currentSpread : researchPages[0])}
+                    side="right"
+                    pageNumber={isTurningLeaf ? (currentSpreadIdx + 1) * 2 + 2 : (isBookFullyOpen ? currentSpreadIdx * 2 + 2 : 2)}
+                  />
+
+                  {/* Drop shadow cast over right page while cover is lifting */}
+                  {!isBookFullyOpen && (
+                    <div
+                      className="absolute inset-0 pointer-events-none bg-black transition-opacity duration-75 z-10"
+                      style={{
+                        opacity: Math.max(0, 1 - coverT * 1.5) * 0.7,
+                      }}
+                    />
+                  )}
+                </div>
+
+                {/* 3. 3D OPENING COVER (Active when scrollP < 0.26) */}
+                {!isBookFullyOpen && (
+                  <BookCover
+                    coverAngle={coverAngle}
+                    glintX={mouseTilt.glintX}
+                    glintY={mouseTilt.glintY}
+                  />
+                )}
+
+                {/* 4. DYNAMIC 3D FLIPPING LEAF (Turns between spreads when book is open) */}
+                {isTurningLeaf && (
+                  <div
+                    className="absolute right-0 top-0 w-1/2 h-full origin-left [transform-style:preserve-3d] z-20 pointer-events-none shadow-2xl transition-transform duration-75"
+                    style={{
+                      transform: `rotateY(${leafAngle}deg) skewY(${paperSkewY}deg) rotateZ(${paperRotateZ}deg)`,
+                    }}
+                  >
+                    {/* Leaf Front (Current Right Page) */}
+                    <div className="absolute inset-0 [backface-visibility:hidden]">
+                      <BookPageFace
+                        page={currentSpread}
+                        side="right"
+                        pageNumber={currentSpreadIdx * 2 + 2}
+                        isTurning={true}
+                        shadowIntensity={shadowIntensity}
+                      />
+                    </div>
+
+                    {/* Leaf Back (Next Left Page landing on the left) */}
+                    <div className="absolute inset-0 [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                      <BookPageFace
+                        page={nextSpread}
+                        side="left"
+                        pageNumber={(currentSpreadIdx + 1) * 2 + 1}
+                        isTurning={true}
+                        shadowIntensity={shadowIntensity}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Red Silk Ribbon trailing through bottom center */}
+              <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 w-4 h-12 bg-gradient-to-b from-red-800 to-red-600 shadow-md rounded-b z-30 hidden sm:flex items-end justify-center pb-1 border-b border-amber-400/50">
+                <div className="w-1.5 h-1.5 rotate-45 bg-amber-400" />
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
