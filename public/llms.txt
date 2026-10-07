@@ -1,52 +1,42 @@
-# Nidhi Prajapati
+# Sachin Yadav (Binary Sphere)
 
-> Nidhi Prajapati is a software engineer building AI agents, voice AI and privacy-first web3 tools, currently working on AI agent reliability at Emergent (YC24). She is based in Bengaluru, India, and is open to work, including freelance and remote roles.
+> Sachin Yadav is a Computer Science Engineering student, software developer, and AI/ML researcher passionate about deep learning, computer vision, and building resilient full-stack systems. He is based in India and is open to opportunities, collaborations, and engineering roles.
 
-Website: https://www.somehowliving.tech
-Email: nidhiyp05@gmail.com
-LinkedIn: https://www.linkedin.com/in/nidhi-prajapati-5b4483248/
-GitHub: https://github.com/SomehowLiving
-X: https://x.com/pnyk05
-Devfolio: https://devfolio.co/@nuna
+Website: https://my-portfolio-ten-beige-59.vercel.app
+Email: yadavsachin123411@gmail.com
+LinkedIn: https://www.linkedin.com/in/sachin-yadav-735444434/
+GitHub: https://github.com/SachinYadav2446
+X: https://x.com/BINARYSPHERE45
+LeetCode: https://leetcode.com/u/Binary-Sphere/
 
 ## About
 
-Nidhi Prajapati is a software engineer who builds AI agents and the infrastructure around them. She works as an AI Agent Reliability Engineer at Emergent (YC24), keeping autonomous coding agents and AI-generated applications reliable in production, and is part of the Nethermind Internship Program, exploring AI-supported blockchain systems: agentic systems, security, natural-language interfaces, protocol design and agentic payments.
+Sachin Yadav (Binary Sphere) is a software engineer and computer science engineering student who builds intelligent systems, deep neural vision models, and full-stack web architectures. His work spans computer vision for satellite meteorology (Cyclone Pattern Identifier), spatial-temporal forecasting (Demand Forecast), collaborative developer platforms (Bright Code), geospatial telemetry systems (JalDrishti), and creative platforms (Creatify).
 
-She started a company at 17, Alphonse Esports, during COVID, then studied computer science at SMVIT (Sir M. Visvesvaraya Institute of Technology), Bengaluru. She found web3 in 2023 and built across multiple chains: SDKs, protocols, zero-knowledge proofs and agentic payments. She became an Algorand Foundation Ambassador, a SheFi Scholar and a Dev3Pack Fellow, ran workshops, mentored developers, and was the founding blockchain engineer at PeerHire. Since 2026 her focus is AI: agents, reliability, and the line where AI meets real systems.
+He approaches engineering from first principles: understanding algorithmic fundamentals, data structures, and mathematical foundations before scaling to production architectures.
 
-She builds end to end, from product idea and design to production, and cares most about what something is for and how it feels to the person using it.
+## Selected Projects
 
-## Selected projects
+- [Bright Code](https://bright-code-ruby.vercel.app/): real-time collaborative coding platform with live sync & interactive workspaces. Built with React, Node.js, Express, MongoDB, Socket.io, and Monaco Editor. Source: https://github.com/SachinYadav2446/BrightCode
+- [JalDrishti](https://github.com/SachinYadav2446/JalDrishti): automated telemetric groundwater resource evaluation platform analyzing Digital Water Level Recorder (DWLR) sensors across India-WRIS for the Ministry of Jal Shakti. Ingests 2.4M+ daily telemetry observations from 3,200+ stations.
+- [Cyclone Pattern Identifier](https://github.com/SachinYadav2446/Cyclone-Pattern-Identifier): an AI-based system for detecting and analyzing cyclone patterns from satellite imagery, eye localization, intensity estimation, and forecasting up to 48 hours using PyTorch, ConvNeXt, and ConvLSTM.
+- [Demand Forecast](https://github.com/SachinYadav2446/Taxi-Demand-Forecasting-System-): a spatial-temporal urban taxi demand forecasting system using historical NYC taxi trip data with ARIMA and SARIMAX time-series models.
+- [Creatify](https://github.com/SachinYadav2446/Creatify): an interactive digital content creation and management engine built with React, TypeScript, and HTML Canvas.
+- [Java Basic Projects](https://github.com/SachinYadav2446/Java-basic-Projects): a modular repository of 12 progressive Java applications demonstrating object-oriented programming, data structures, and algorithmic patterns.
+- [JavaScript Basic Projects](https://github.com/SachinYadav2446/JS-Projects-Basics-): practical laboratory of vanilla JavaScript web applications and asynchronous DOM engineering.
 
-- [Voxie](https://voxieai.vercel.app/): voice agents that speak your caller's language: listening, turn-taking, interruptions and the voice, in 17 languages. Open source: https://github.com/SomehowLiving/Voxie
-- [REX by Softknock](https://softknockai.vercel.app/): an autonomous revenue execution agent that follows up every failed payment by email, text and a friendly call, in the customer's own language.
-- [Inscribe](https://studio-bay-omega.vercel.app/): a browser extension and agent-native workshop built on WebMCP. It uses a website's own declared tools when it has them and infers capabilities when it doesn't, so an AI agent acts on meaning instead of pixels. https://github.com/SomehowLiving/Inscribe
-- [ScreenMesh](https://screenmesh.vercel.app/): move work between your devices without moving it through an app you don't trust. Local-first, end-to-end encrypted. https://github.com/SomehowLiving/screenmesh
-- [Onkey](https://www.npmjs.com/package/@onkey/sdk): self-hosted web3 authentication for everyone, with email login and smart contract wallets, published on npm as @onkey/sdk. https://github.com/SomehowLiving/onkey
-- [Point](https://github.com/nidhiprajapati-ops/point): a system-wide spatial AI context layer: press a shortcut, select anything visible on screen, give an instruction, and get an answer or trigger an action.
-- [Acre](https://acre-web-three.vercel.app/): zero-knowledge attestations that let gig workers prove their income without revealing their financial data.
-- [Consensa](https://consensa.vercel.app/): three independent AI signals commit blind, and two must agree on-chain before anything trades.
-- [Ward](https://ward-steel.vercel.app/): runs risky on-chain interactions inside disposable, loss-capped smart-wallet pockets.
-- [x402 builder kit](https://x402-kit-kappa.vercel.app): a starter kit for AI agents that pay for APIs with the x402 protocol on Algorand.
-- [ClinaraAI](https://clinaraai-eight.vercel.app): clinical decision support with explainable AI across six diseases.
-- [UsageLedger](https://usage-ledger.vercel.app) and [Billing Migration Studio](https://billing-migration-studio.vercel.app): usage-based billing and billing-data migration infrastructure for SaaS.
-
-All projects: https://www.somehowliving.tech/work
+All projects: https://my-portfolio-ten-beige-59.vercel.app/work
 
 ## FAQ
 
-### Who is Nidhi Prajapati?
-A Bengaluru-based software engineer who builds AI agents, voice AI and privacy-first web3 tools. She works on AI agent reliability at Emergent (YC24).
+### Who is Sachin Yadav?
+A software developer and Computer Science Engineering student passionate about AI/ML, computer vision, full-stack development, and systems engineering.
 
-### What does she build?
-AI agents (Voxie, REX, Inscribe, Point), web3 and privacy tools (Acre, Consensa, Ward, Onkey, the x402 builder kit), and billing infrastructure (UsageLedger, Billing Migration Studio). She works end to end, from product idea and design to production.
+### What does he build?
+AI/ML systems (Cyclone Pattern Identifier, Demand Forecast), full-stack collaborative platforms (Bright Code), telemetry data systems (JalDrishti), and creative web tools (Creatify).
 
-### Is she open to work?
-Yes. She is open to full-time roles and freelance projects, in Bengaluru or remote.
+### Is he open to work?
+Yes. He is open to internships, full-time engineering roles, research collaborations, and freelance projects.
 
-### How do I contact her?
-Email nidhiyp05@gmail.com, or reach out on LinkedIn: https://www.linkedin.com/in/nidhi-prajapati-5b4483248/
-
-### Where can I see her work?
-https://www.somehowliving.tech/work and https://github.com/SomehowLiving
+### How do I contact him?
+Email yadavsachin123411@gmail.com, or connect on LinkedIn: https://www.linkedin.com/in/sachin-yadav-735444434/
